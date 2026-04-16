@@ -1,0 +1,28 @@
+---
+interface Props {
+  authors: string[];
+  qameAuthors?: string[];
+}
+
+const { authors, qameAuthors = [] } = Astro.props;
+const qameSet = new Set(qameAuthors);
+---
+
+<span class="author-list">
+  {authors.map((a, i) => (
+    <>
+      {qameSet.has(a) ? <strong>{a}</strong> : <span>{a}</span>}
+      {i < authors.length - 1 ? ', ' : ''}
+    </>
+  ))}
+</span>
+
+<style>
+  .author-list strong {
+    color: var(--black);
+    font-weight: 600;
+  }
+  .author-list span {
+    color: var(--gray-700);
+  }
+</style>

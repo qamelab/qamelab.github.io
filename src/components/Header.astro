@@ -1,0 +1,132 @@
+---
+interface Props {
+  active?: 'research' | 'papers' | 'software' | 'data' | 'team';
+}
+
+const { active = 'research' } = Astro.props;
+
+const navItems = [
+  { key: 'research', label: 'Research', href: '/' },
+  { key: 'papers',   label: 'Papers',   href: '/papers/' },
+  { key: 'software', label: 'Software', href: '/software/' },
+  { key: 'data',     label: 'Data',     href: '/data/' },
+  { key: 'team',     label: 'Team',     href: '/team/' },
+] as const;
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="header-left">
+      <a href="/" class="logo-link">
+        <span class="logo-text">QAME</span>
+        <span class="logo-suffix">Lab</span>
+      </a>
+      <span class="header-divider"></span>
+      <a
+        href="https://www.bfh.ch/en/research/research-areas/applied-data-science-and-finance/"
+        class="affiliation"
+        target="_blank"
+        rel="noopener"
+      >
+        Institute for Applied Data Science &amp; Finance
+        <span class="affiliation-org">Bern University of Applied Sciences</span>
+      </a>
+    </div>
+    <nav class="header-nav">
+      {navItems.map(item => (
+        <a href={item.href} class:list={["nav-link", { active: active === item.key }]}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3.5rem;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-link {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    text-decoration: none;
+  }
+  .logo-text {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--black);
+  }
+  .logo-suffix {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--gray-500);
+  }
+
+  .header-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--gray-200);
+  }
+
+  .affiliation {
+    font-size: 11px;
+    line-height: 1.3;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .affiliation:hover { color: var(--gray-700); }
+  .affiliation-org {
+    display: block;
+    color: var(--gray-300);
+  }
+
+  .header-nav {
+    display: flex;
+    gap: 22px;
+  }
+  .nav-link {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-wide);
+    color: var(--gray-700);
+    text-decoration: none;
+    padding-bottom: 2px;
+    transition: color 0.15s;
+  }
+  .nav-link:hover {
+    color: var(--black);
+  }
+  .nav-link.active {
+    color: var(--black);
+    font-weight: 600;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .affiliation { display: none; }
+    .header-divider { display: none; }
+    .header-nav { gap: 14px; }
+  }
+</style>

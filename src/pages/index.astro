@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ResearchAreas from '../components/ResearchAreas.astro';
+import FeedSidebar from '../components/FeedSidebar.astro';
+import ProjectsGrants from '../components/ProjectsGrants.astro';
+---
+
+<Base>
+  <Header active="research" />
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-kicker">Quantitative Agentic &amp; Media Economics</p>
+        <h1>QAME Lab</h1>
+        <hr class="rule" />
+        <p class="hero-lead">
+          We study how AI and media shape economic decisions and information flows —
+          and what that means for politics, society, and the economy.
+        </p>
+        <div class="hero-actions">
+          <a href="/papers/" class="btn">Paper Series</a>
+          <a href="#research" class="btn btn-secondary">Research Areas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research + Feed -->
+  <section id="research" class="section section-research-feed">
+    <div class="container research-feed-grid">
+      <ResearchAreas />
+      <FeedSidebar />
+    </div>
+  </section>
+
+  <!-- Projects & Grants -->
+  <section class="section">
+    <div class="container">
+      <ProjectsGrants />
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .hero {
+    padding-top: var(--space-20);
+    padding-bottom: var(--space-14);
+  }
+  .hero-content {
+    max-width: 36rem;
+  }
+  .hero-kicker {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .hero-lead {
+    font-size: 17px;
+    color: var(--gray-700);
+    line-height: var(--leading-relaxed);
+    max-width: 34rem;
+    margin-bottom: var(--space-8);
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .research-feed-grid {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .research-feed-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero h1 { font-size: 36px; }
+    .hero-lead { font-size: 15px; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+  }
+</style>

@@ -1,0 +1,202 @@
+---
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const allGrants = (await getCollection('grants'))
+  .sort((a, b) => b.data.yearEnd - a.data.yearEnd);
+
+const initialGrants = allGrants.slice(0, 3);
+const additionalGrants = allGrants.slice(3);
+const hasMoreGrants = additionalGrants.length > 0;
+
+function yearRange(start: number, end?: number): string {
+  if (end === undefined) return `${start}–`;
+  if (start === end) return `${start}`;
+  return `${start}–${end}`;
+}
+---
+
+<div class="projects-block">
+  <p class="label">Projects &amp; Grants</p>
+  <h2>What we&rsquo;re working on</h2>
+  <hr class="rule" />
+
+  {projects.length > 0 && (
+    <>
+      <p class="label-accent" style="margin-top: 8px;">Ongoing</p>
+      <div class="project-grid">
+        {projects.map(project => (
+          <article class="project-card">
+            <span class="project-funder">
+              {project.data.funder.toUpperCase()} · {yearRange(project.data.yearStart, project.data.yearEnd)}
+            </span>
+            <h3 class="project-title">{project.data.title}</h3>
+            <p class="project-pi">
+              {project.data.partner
+                ? <>With {project.data.partner}</>
+                : <>PI: <strong>{project.data.pi}</strong></>}
+            </p>
+            <p class="project-desc">{project.data.description}</p>
+          </article>
+        ))}
+      </div>
+    </>
+  )}
+
+  {allGrants.length > 0 && (
+    <>
+      <p class="label-accent" style="margin-top: 40px;">Previous grants</p>
+      <div class="grant-list" id="grant-list">
+        {initialGrants.map(grant => (
+          <div class="grant-row">
+            <span class="grant-funder">{grant.data.funder}</span>
+            <div class="grant-body">
+              <p class="grant-title">{grant.data.title}</p>
+              <p class="grant-pi">PI: {grant.data.pi}</p>
+            </div>
+            <span class="grant-years">{yearRange(grant.data.yearStart, grant.data.yearEnd)}</span>
+          </div>
+        ))}
+        {hasMoreGrants && (
+          <div id="more-grants" hidden>
+            {additionalGrants.map(grant => (
+              <div class="grant-row">
+                <span class="grant-funder">{grant.data.funder}</span>
+                <div class="grant-body">
+                  <p class="grant-title">{grant.data.title}</p>
+                  <p class="grant-pi">PI: {grant.data.pi}</p>
+                </div>
+                <span class="grant-years">{yearRange(grant.data.yearStart, grant.data.yearEnd)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      {hasMoreGrants && (
+        <button type="button" id="show-more-grants" class="show-more-btn">
+          Show all previous grants →
+        </button>
+      )}
+    </>
+  )}
+</div>
+
+<script>
+  const btn = document.getElementById('show-more-grants');
+  const more = document.getElementById('more-grants');
+  if (btn && more) {
+    btn.addEventListener('click', () => {
+      more.removeAttribute('hidden');
+      btn.style.display = 'none';
+    });
+  }
+</script>
+
+<style>
+  .projects-block { padding-top: var(--space-4); }
+
+  /* Ongoing grid */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: var(--space-4);
+  }
+  .project-card {
+    border: 1px solid var(--gray-100);
+    padding: var(--space-5);
+  }
+  .project-funder {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    color: var(--accent);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .project-title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: var(--leading-snug);
+    margin: 0 0 var(--space-1);
+    color: var(--black);
+  }
+  .project-pi {
+    font-size: 12px;
+    color: var(--gray-700);
+    margin: 0 0 10px;
+  }
+  .project-pi strong {
+    color: var(--black);
+  }
+  .project-desc {
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* Previous grants list */
+  .grant-list {
+    margin-top: var(--space-4);
+  }
+  .grant-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 80px;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--gray-100);
+    align-items: baseline;
+  }
+  .grant-funder {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gray-500);
+  }
+  .grant-title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: var(--leading-snug);
+    margin: 0 0 2px;
+    color: var(--black);
+  }
+  .grant-pi {
+    font-size: 11px;
+    color: var(--gray-700);
+    margin: 0;
+  }
+  .grant-years {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    text-align: right;
+  }
+
+  .show-more-btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    background: none;
+    border: none;
+    padding: var(--space-3) 0;
+    cursor: pointer;
+    display: block;
+    transition: color 0.15s;
+  }
+  .show-more-btn:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .project-grid { grid-template-columns: 1fr; }
+    .grant-row {
+      grid-template-columns: 100px 1fr;
+    }
+    .grant-years {
+      grid-column: 2;
+      text-align: left;
+    }
+  }
+</style>

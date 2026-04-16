@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('news');
+const posts = allPosts
+  .sort((a, b) => b.data.postedAt.valueOf() - a.data.postedAt.valueOf())
+  .slice(0, 3);
+
+function timeAgo(date: Date): string {
+  const diffMs = Date.now() - date.valueOf();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 30) return `${diffDays}d ago`;
+  const diffMonths = Math.floor(diffDays / 30);
+  return `${diffMonths}mo ago`;
+}
+---
+
+<aside class="feed-sidebar">
+  <p class="label">Feed</p>
+  <p class="feed-title">Latest activity</p>
+  <hr class="rule-sm" />
+
+  {posts.length > 0 ? (
+    <>
+      {posts.map(post => (
+        <a href={post.data.url} target="_blank" rel="noopener" class="feed-post">
+          <div class="feed-meta">
+            <span class="feed-platform">{post.data.platform.toUpperCase()}</span>
+            <span class="feed-time">· {timeAgo(post.data.postedAt)}</span>
+          </div>
+          <p class="feed-text">{post.data.text}</p>
+        </a>
+      ))}
+      <a href="https://bsky.app/profile/qamelab.bsky.social" target="_blank" rel="noopener" class="feed-more">
+        See more →
+      </a>
+    </>
+  ) : (
+    <p class="feed-empty">Feed will populate once the lab's Bluesky account is active.</p>
+  )}
+</aside>
+
+<style>
+  .feed-sidebar {
+    font-size: 12px;
+  }
+  .feed-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--black);
+  }
+
+  .feed-post {
+    display: block;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--gray-100);
+    margin-bottom: 14px;
+    text-decoration: none;
+    color: var(--black);
+  }
+  .feed-post:last-of-type {
+    margin-bottom: var(--space-3);
+  }
+  .feed-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-bottom: var(--space-2);
+  }
+  .feed-platform {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: var(--tracking-wide);
+  }
+  .feed-time {
+    font-size: 10px;
+    color: var(--gray-300);
+  }
+  .feed-text {
+    font-size: 12px;
+    color: var(--black);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .feed-post:hover .feed-text {
+    color: var(--accent);
+  }
+
+  .feed-more {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    text-decoration: none;
+    display: block;
+    padding-top: 4px;
+  }
+  .feed-more:hover {
+    color: var(--accent);
+  }
+
+  .feed-empty {
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.55;
+    font-style: italic;
+  }
+</style>

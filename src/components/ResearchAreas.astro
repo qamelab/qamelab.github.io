@@ -1,0 +1,82 @@
+---
+const areas = [
+  {
+    tag: 'Media Economics',
+    title: 'Media Markets & Political Economy',
+    description: 'Advertising markets, media ownership, information provision, and the political economy of news.',
+  },
+  {
+    tag: 'Agentic Economy',
+    title: 'AI Agents & Economics',
+    description: 'AI agents as economic actors — their decision-making, the design of agentic firms and multi-agent organisations, and the principal-agent problems when humans delegate to them.',
+  },
+  {
+    tag: 'Intersection',
+    title: 'Algorithms & AI Agents in Media Systems',
+    description: 'Recommender systems, algorithmic curation, AI-driven content generation, and bias in automated media — with LLMs and agents as both objects of study and methodological tools.',
+  },
+  {
+    tag: 'Methods, Learning & Cooperation',
+    title: 'Quantitative & Computational',
+    description: 'Applied econometrics, ML and NLP pipelines, and local-first data engineering — brought into teaching the next generation of data-fluent economists and into cooperation with industry, government, and NGO partners.',
+  },
+];
+---
+
+<div class="research-block">
+  <p class="label">Research</p>
+  <h2>Areas of focus</h2>
+  <hr class="rule" />
+  <div class="area-grid">
+    {areas.map(area => (
+      <div class="area-card">
+        <span class="area-tag">{area.tag}</span>
+        <h3 class="area-title">{area.title}</h3>
+        <p class="area-desc">{area.description}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .area-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: var(--space-6);
+  }
+  .area-card {
+    border: 1px solid var(--gray-100);
+    padding: var(--space-5);
+    transition: border-color 0.15s;
+  }
+  .area-card:hover {
+    border-color: var(--gray-200);
+  }
+  .area-tag {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--space-2);
+  }
+  .area-title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: var(--leading-snug);
+    margin: 0 0 var(--space-1);
+    color: var(--black);
+  }
+  .area-desc {
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .area-grid { grid-template-columns: 1fr; }
+  }
+</style>

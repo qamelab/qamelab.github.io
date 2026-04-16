@@ -1,0 +1,222 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import AuthorList from '../../components/AuthorList.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('papers');
+  return papers.map(paper => ({
+    params: { slug: paper.slug },
+    props: { paper },
+  }));
+}
+
+const { paper } = Astro.props;
+const { Content } = await paper.render();
+const {
+  id, title, authors, qameAuthors, date, abstract, keywords,
+  pdf, doi, arxiv, ssrn, replication,
+} = paper.data;
+
+const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+const bibtexKey = paper.slug.replace(/-/g, '_');
+---
+
+<Base title={title} description={abstract}>
+  <Header active="papers" />
+
+  <article class="paper-detail section" style="padding-top: var(--space-10);">
+    <div class="container">
+      <a href="/papers/" class="back-link">← All papers</a>
+
+      <header class="detail-header">
+        <div class="paper-meta-row">
+          <span class="paper-id">{id}</span>
+          <span class="date-mono">{dateStr}</span>
+        </div>
+        <h1>{title}</h1>
+        <p class="detail-authors">
+          <AuthorList authors={authors} qameAuthors={qameAuthors} />
+        </p>
+      </header>
+
+      <div class="detail-body">
+        <div class="detail-main">
+          <section class="abstract">
+            <p class="label-accent">Abstract</p>
+            <p class="abstract-text">{abstract}</p>
+          </section>
+
+          {keywords && keywords.length > 0 && (
+            <section class="keywords">
+              <p class="label-accent">Keywords</p>
+              <p class="keywords-text">{keywords.join(' · ')}</p>
+            </section>
+          )}
+
+          <section class="paper-content">
+            <Content />
+          </section>
+        </div>
+
+        <aside class="detail-sidebar">
+          <div class="sidebar-block">
+            <p class="label">Download</p>
+            {pdf ? (
+              <a href={pdf} class="btn" download>PDF ↓</a>
+            ) : (
+              <p class="sidebar-note">PDF forthcoming</p>
+            )}
+          </div>
+
+          {(doi || arxiv || ssrn || replication) && (
+            <div class="sidebar-block">
+              <p class="label">Also available</p>
+              <div class="ext-links">
+                {doi && <a href={`https://doi.org/${doi}`} target="_blank" rel="noopener">Zenodo (DOI)</a>}
+                {arxiv && <a href={`https://arxiv.org/abs/${arxiv}`} target="_blank" rel="noopener">arXiv</a>}
+                {ssrn && <a href={`https://papers.ssrn.com/sol3/papers.cfm?abstract_id=${ssrn}`} target="_blank" rel="noopener">SSRN</a>}
+                {replication && <a href={replication} target="_blank" rel="noopener">Replication</a>}
+              </div>
+            </div>
+          )}
+
+          <div class="sidebar-block">
+            <p class="label">Cite</p>
+            <pre class="cite-block"><code>{`@techreport{${bibtexKey},
+  title  = {${title}},
+  author = {${authors.join(' and ')}},
+  year   = {${date.getFullYear()}},
+  series = {QAME Paper Series},
+  number = {${id}}${doi ? `,\n  doi    = {${doi}}` : ''}
+}`}</code></pre>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <Footer />
+</Base>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--gray-500);
+    text-decoration: none;
+    margin-bottom: var(--space-8);
+  }
+  .back-link:hover { color: var(--black); }
+
+  .detail-header {
+    max-width: 44rem;
+    margin-bottom: var(--space-10);
+  }
+  .paper-meta-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-bottom: 10px;
+  }
+  .date-mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .detail-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: var(--leading-snug);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-3);
+  }
+  .detail-authors {
+    font-size: 15px;
+    color: var(--gray-700);
+  }
+
+  .detail-body {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  .abstract .label-accent { margin-bottom: var(--space-3); }
+  .abstract-text {
+    font-size: 15px;
+    line-height: var(--leading-relaxed);
+    color: var(--gray-700);
+    max-width: 58ch;
+  }
+
+  .keywords {
+    margin-top: var(--space-6);
+  }
+  .keywords .label-accent { margin-bottom: var(--space-2); }
+  .keywords-text {
+    font-size: 13px;
+    color: var(--gray-500);
+  }
+
+  .paper-content {
+    margin-top: var(--space-6);
+    line-height: var(--leading-relaxed);
+    color: var(--gray-700);
+  }
+
+  /* Sidebar */
+  .detail-sidebar {
+    position: sticky;
+    top: 5rem;
+  }
+  .sidebar-block + .sidebar-block {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--gray-100);
+  }
+  .sidebar-block .label {
+    margin-bottom: var(--space-3);
+  }
+  .sidebar-note { font-size: 12px; color: var(--gray-500); font-style: italic; }
+
+  .ext-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .ext-links a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-700);
+    text-decoration: none;
+  }
+  .ext-links a:hover { color: var(--accent); }
+
+  .cite-block {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-100);
+    padding: var(--space-3);
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--gray-700);
+  }
+
+  @media (max-width: 900px) {
+    .detail-body {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+    .detail-sidebar {
+      position: static;
+      border-top: 1px solid var(--gray-100);
+      padding-top: var(--space-6);
+    }
+  }
+</style>

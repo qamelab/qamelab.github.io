@@ -1,0 +1,105 @@
+---
+import AuthorList from './AuthorList.astro';
+
+interface Props {
+  paperId: string;
+  title: string;
+  authors: string[];
+  qameAuthors?: string[];
+  date: Date;
+  abstract: string;
+  slug: string;
+  pdf?: string;
+  doi?: string;
+}
+
+const { paperId, title, authors, qameAuthors = [], date, abstract, slug, pdf, doi } = Astro.props;
+
+const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+const truncated = abstract.length > 220
+  ? abstract.slice(0, 220).replace(/\s+\S*$/, '') + '…'
+  : abstract;
+---
+
+<article class="paper-card">
+  <div class="paper-meta">
+    <span class="paper-id">{paperId}</span>
+    <span class="paper-date">{dateStr}</span>
+  </div>
+  <h3 class="paper-title">
+    <a href={`/papers/${slug}/`}>{title}</a>
+  </h3>
+  <p class="paper-authors">
+    <AuthorList authors={authors} qameAuthors={qameAuthors} />
+  </p>
+  <p class="paper-abstract">{truncated}</p>
+  <div class="paper-links">
+    {pdf && <a href={pdf} target="_blank" rel="noopener">PDF</a>}
+    {doi && (
+      <>
+        <span class="sep">·</span>
+        <a href={`https://doi.org/${doi}`} target="_blank" rel="noopener">DOI</a>
+      </>
+    )}
+    <span class="sep">·</span>
+    <a href={`/papers/${slug}/`}>BibTeX</a>
+  </div>
+</article>
+
+<style>
+  .paper-card {
+    border: 1px solid var(--gray-100);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+  }
+  .paper-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .paper-date {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-300);
+  }
+  .paper-title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: var(--leading-snug);
+    margin: 0 0 var(--space-1);
+  }
+  .paper-title a {
+    text-decoration: none;
+    color: var(--black);
+  }
+  .paper-title a:hover {
+    color: var(--accent);
+  }
+  .paper-authors {
+    font-size: 12px;
+    color: var(--gray-700);
+    margin-bottom: 10px;
+  }
+  .paper-abstract {
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin: 0 0 12px;
+    flex: 1;
+  }
+  .paper-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .paper-links a {
+    color: var(--black);
+    text-decoration: none;
+  }
+  .paper-links a:hover { color: var(--accent); }
+  .sep { color: var(--gray-300); }
+</style>

@@ -1,0 +1,225 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PaperCard from '../../components/PaperCard.astro';
+import AuthorList from '../../components/AuthorList.astro';
+import { getCollection } from 'astro:content';
+
+const papers = (await getCollection('papers'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const publications = (await getCollection('publications'))
+  .sort((a, b) => b.data.year - a.data.year);
+
+const published = publications.filter(p => p.data.era === 'since-founding');
+const earlier = publications.filter(p => p.data.era === 'earlier');
+---
+
+<Base title="Papers">
+  <Header active="papers" />
+
+  <section class="section" style="padding-top: var(--space-12);">
+    <div class="container">
+      <p class="label">Papers</p>
+      <h1 style="font-size: 32px; font-weight: 700;">Research output</h1>
+      <hr class="rule" />
+      <p class="page-intro">
+        The <strong>QAME Paper Series</strong> is the lab's own working-paper series — new
+        research released under a QAME ID with a persistent DOI. Below that you'll
+        find peer-reviewed publications and, at the bottom, earlier work by
+        members that pre-dates the lab.
+      </p>
+
+      <!-- ========== SECTION 1: QAME Paper Series ========== -->
+      <div class="section-block">
+        <p class="label-accent">QAME Paper Series</p>
+        <p class="section-note">Working papers under the lab's imprint. DOI via Zenodo. Cross-posted to arXiv and SSRN.</p>
+        {papers.length > 0 ? (
+          <div class="paper-grid">
+            {papers.map(paper => (
+              <PaperCard
+                paperId={paper.data.id}
+                title={paper.data.title}
+                authors={paper.data.authors}
+                qameAuthors={paper.data.qameAuthors}
+                date={paper.data.date}
+                abstract={paper.data.abstract}
+                slug={paper.slug}
+                pdf={paper.data.pdf}
+                doi={paper.data.doi}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="empty-note">The first QAME Papers are forthcoming.</p>
+        )}
+      </div>
+
+      <!-- ========== SECTION 2: Published Articles ========== -->
+      {published.length > 0 && (
+        <div class="section-block">
+          <p class="label-accent">Published Articles</p>
+          <p class="section-note">Peer-reviewed work since the lab's founding. Includes QAME Papers that have since been published.</p>
+          <div class="publication-list">
+            {published.map(pub => (
+              <article class="pub-row">
+                <p class="pub-title">{pub.data.title}</p>
+                <p class="pub-meta">
+                  <AuthorList authors={pub.data.authors} qameAuthors={pub.data.qameAuthors} />
+                  <span class="sep">·</span>
+                  <em>{pub.data.venue}</em>
+                  <span class="sep">·</span>
+                  <span class="pub-year">{pub.data.year}</span>
+                </p>
+                <div class="pub-links">
+                  {pub.data.doi && <a href={`https://doi.org/${pub.data.doi}`} target="_blank" rel="noopener">DOI</a>}
+                  {pub.data.preprint && (<><span class="sep">·</span><a href={pub.data.preprint} target="_blank" rel="noopener">Preprint</a></>)}
+                  {pub.data.replication && (<><span class="sep">·</span><a href={pub.data.replication} target="_blank" rel="noopener">Replication</a></>)}
+                  {pub.data.fromQamePaper && (
+                    <>
+                      <span class="sep">·</span>
+                      <span class="from-qame">from {pub.data.fromQamePaper}</span>
+                    </>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- ========== SECTION 3: Earlier Work ========== -->
+      {earlier.length > 0 && (
+        <div class="section-block">
+          <p class="label-accent">Earlier Work by Members</p>
+          <p class="section-note">Publications by current lab members that pre-date the lab's founding. Kept here for intellectual context.</p>
+          <div class="earlier-list">
+            {earlier.map(pub => (
+              <div class="earlier-row">
+                <span class="earlier-year">{pub.data.year}</span>
+                <div>
+                  <p class="earlier-title">{pub.data.title}</p>
+                  <p class="earlier-meta">
+                    <AuthorList authors={pub.data.authors} qameAuthors={pub.data.qameAuthors} />
+                    <span class="sep">·</span>
+                    <em>{pub.data.venue}</em>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .page-intro {
+    font-size: 15px;
+    color: var(--gray-700);
+    line-height: var(--leading-relaxed);
+    max-width: 40rem;
+    margin-top: var(--space-4);
+  }
+
+  .section-block {
+    margin-top: var(--space-12);
+  }
+  .section-note {
+    font-size: 12px;
+    color: var(--gray-500);
+    font-style: italic;
+    margin: 4px 0 var(--space-5);
+  }
+
+  .paper-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .publication-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .pub-row {
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .pub-row:last-child { border-bottom: none; }
+  .pub-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: var(--leading-snug);
+    margin-bottom: 4px;
+    color: var(--black);
+  }
+  .pub-meta {
+    font-size: 13px;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+  }
+  .pub-meta em {
+    font-style: italic;
+  }
+  .pub-year {
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .pub-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .pub-links a {
+    color: var(--gray-500);
+    text-decoration: none;
+  }
+  .pub-links a:hover { color: var(--accent); }
+  .from-qame {
+    color: var(--accent);
+  }
+
+  .earlier-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .earlier-row {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--gray-100);
+    align-items: baseline;
+  }
+  .earlier-row:last-child { border-bottom: none; }
+  .earlier-year {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .earlier-title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: var(--leading-snug);
+    margin-bottom: 2px;
+    color: var(--black);
+  }
+  .earlier-meta {
+    font-size: 12px;
+    color: var(--gray-700);
+  }
+
+  .sep { color: var(--gray-300); margin: 0 2px; }
+  .empty-note { color: var(--gray-500); font-style: italic; margin-top: var(--space-4); }
+
+  @media (max-width: 768px) {
+    .paper-grid { grid-template-columns: 1fr; }
+  }
+</style>

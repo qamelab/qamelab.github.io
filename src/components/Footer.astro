@@ -1,0 +1,97 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <p class="brand-line">
+        <strong>QAME Lab</strong> — Quantitative Agentic &amp; Media Economics
+      </p>
+      <p class="footer-affiliation">
+        Affiliated with the
+        <a href="https://www.bfh.ch/en/research/research-areas/applied-data-science-and-finance/" target="_blank" rel="noopener">
+          Institute for Applied Data Science &amp; Finance</a>,
+        <a href="https://www.bfh.ch/" target="_blank" rel="noopener">
+          Bern University of Applied Sciences</a>.
+      </p>
+    </div>
+    <div class="footer-contact">
+      <p class="footer-label">Contact</p>
+      <p class="contact-line">
+        <a href="mailto:ulrich.matter@bfh.ch">ulrich.matter@bfh.ch</a>
+      </p>
+      <p class="contact-line">
+        <a href="https://bsky.app/profile/qamelab.bsky.social" target="_blank" rel="noopener">@qamelab.bsky.social</a>
+      </p>
+    </div>
+    <div class="footer-right">
+      <p class="copyright">&copy; {year} QAME Lab</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--gray-100);
+    padding: var(--space-8) 0;
+    margin-top: var(--space-16);
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+  .brand-line {
+    font-size: 13px;
+    color: var(--gray-700);
+    margin-bottom: var(--space-1);
+  }
+  .footer-affiliation {
+    font-size: 11px;
+    color: var(--gray-500);
+    line-height: 1.6;
+  }
+  .footer-affiliation a {
+    color: var(--gray-500);
+    text-decoration-color: var(--gray-300);
+  }
+  .footer-affiliation a:hover { color: var(--black); }
+
+  .footer-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--gray-300);
+    margin-bottom: var(--space-2);
+  }
+  .contact-line {
+    font-size: 12px;
+    color: var(--gray-700);
+    margin: 0 0 3px 0;
+  }
+  .contact-line a {
+    color: var(--gray-700);
+    text-decoration: none;
+  }
+  .contact-line a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+  }
+
+  .footer-right { text-align: right; }
+  .copyright {
+    font-size: 11px;
+    color: var(--gray-300);
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    .footer-right { text-align: left; }
+  }
+</style>

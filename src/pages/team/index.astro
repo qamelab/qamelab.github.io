@@ -1,0 +1,170 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const everyone = await getCollection('team');
+
+const current = everyone
+  .filter(m => m.data.status === 'current')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const alumni = everyone
+  .filter(m => m.data.status === 'alumni')
+  .sort((a, b) => (b.data.yearLeft ?? 0) - (a.data.yearLeft ?? 0));
+
+function deriveInitials(name: string): string {
+  return name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+}
+---
+
+<Base title="Team">
+  <Header active="team" />
+
+  <section class="section" style="padding-top: var(--space-12);">
+    <div class="container">
+      <p class="label">Team</p>
+      <h1 style="font-size: 32px; font-weight: 700;">People</h1>
+      <hr class="rule" />
+
+      {current.length > 0 && (
+        <div class="section-block">
+          <p class="label-accent">Current members</p>
+          <div class="team-grid">
+            {current.map(m => (
+              <article class="member-card">
+                <div class="avatar">{m.data.initials ?? deriveInitials(m.data.name)}</div>
+                <p class="member-name">
+                  {m.data.website ? (
+                    <a href={m.data.website} target="_blank" rel="noopener">{m.data.name}</a>
+                  ) : (
+                    m.data.name
+                  )}
+                </p>
+                <p class="member-role">{m.data.role}</p>
+                <p class="member-affiliation">{m.data.affiliation}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {alumni.length > 0 && (
+        <div class="section-block">
+          <p class="label-accent">Former members</p>
+          <div class="alumni-list">
+            {alumni.map(m => (
+              <div class="alumni-row">
+                <p class="alumni-name">{m.data.name}</p>
+                <p class="alumni-role">{m.data.alumniRole ?? m.data.role}</p>
+                <p class="alumni-current">{m.data.currentPosition ?? '—'}</p>
+                <p class="alumni-year">{m.data.yearLeft ?? ''}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .section-block { margin-top: var(--space-8); }
+  .section-block + .section-block { margin-top: var(--space-14); }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: var(--space-4);
+  }
+  .member-card {
+    border: 1px solid var(--gray-100);
+    padding: var(--space-5);
+  }
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--gray-100);
+    color: var(--gray-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .member-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 3px;
+    color: var(--black);
+  }
+  .member-name a {
+    color: var(--black);
+    text-decoration: none;
+  }
+  .member-name a:hover { color: var(--accent); }
+  .member-role {
+    font-size: 12px;
+    color: var(--gray-700);
+    margin: 0 0 3px;
+  }
+  .member-affiliation {
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+
+  .alumni-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--space-4);
+  }
+  .alumni-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr 60px;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--gray-100);
+    align-items: baseline;
+  }
+  .alumni-row:last-child { border-bottom: none; }
+  .alumni-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    margin: 0;
+  }
+  .alumni-role {
+    font-size: 13px;
+    color: var(--gray-700);
+    margin: 0;
+  }
+  .alumni-current {
+    font-size: 13px;
+    color: var(--gray-700);
+    margin: 0;
+  }
+  .alumni-year {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-500);
+    text-align: right;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .alumni-row {
+      grid-template-columns: 1fr 60px;
+      gap: var(--space-2);
+    }
+    .alumni-role, .alumni-current {
+      grid-column: 1 / -1;
+      font-size: 12px;
+    }
+  }
+</style>
