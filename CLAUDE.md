@@ -1,4 +1,6 @@
-# QAME Lab Website
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
@@ -7,6 +9,7 @@ affiliated research lab of the Institute for Applied Data Science & Finance at
 Bern University of Applied Sciences (BFH).
 
 **Stack:** Astro 5, static site, deployed to GitHub Pages.
+**Site:** https://qamelab.org
 
 **Design:** Light Swiss minimalist. Hanken Grotesk for UI, JetBrains Mono for
 metadata (paper IDs, dates, tech stacks, formats). Burnt-orange accent
@@ -14,41 +17,16 @@ metadata (paper IDs, dates, tech stacks, formats). Burnt-orange accent
 The only decorative element is the short orange `<hr class="rule">` below
 section headings.
 
-## Project Structure
+## Architecture
 
-```
-src/
-├── content/
-│   ├── config.ts           # Collection schemas
-│   ├── papers/             # QAME Paper Series entries (.md)
-│   ├── publications/       # Peer-reviewed articles (.md)
-│   ├── team/               # Current members + alumni (.md)
-│   ├── projects/           # Ongoing funded projects (.md)
-│   ├── grants/             # Previous grants (.md)
-│   ├── software/           # Open-source tools (.md)
-│   ├── data/               # Datasets (.md)
-│   └── news/               # Social feed items (.json)
-├── layouts/
-│   └── Base.astro          # HTML shell, meta, fonts, global CSS
-├── components/
-│   ├── Header.astro        # Sticky nav, BFH affiliation, active state
-│   ├── Footer.astro        # Institutional links, contact, copyright
-│   ├── ResearchAreas.astro # Four-pillar grid with orange labels
-│   ├── FeedSidebar.astro   # Social feed (3 posts + see-more)
-│   ├── ProjectsGrants.astro# Ongoing cards + collapsible grant list
-│   ├── AuthorList.astro    # Renders authors with QAME members bolded
-│   └── PaperCard.astro     # QAME Paper Series card
-├── pages/
-│   ├── index.astro         # Home (Research): hero, areas+feed, projects
-│   ├── papers/
-│   │   ├── index.astro     # 3-layer: Series, Published, Earlier
-│   │   └── [slug].astro    # Detail page with sidebar + BibTeX
-│   ├── software/index.astro
-│   ├── data/index.astro
-│   └── team/index.astro    # Current cards + alumni ledger
-└── styles/
-    └── global.css          # Design tokens, base, utilities
-```
+- **Content collections** in `src/content/` (papers, publications, team, projects,
+  grants, software, data, news) with Zod schemas in `src/content/config.ts`.
+- **Pages** in `src/pages/` — Astro file-based routing. `papers/[slug].astro` is
+  the only dynamic route (paper detail pages).
+- **Components** in `src/components/` — all `.astro`, no framework (React/Vue/etc).
+- **Single layout** `src/layouts/Base.astro` — HTML shell, fonts, global CSS.
+- **Styles** in `src/styles/global.css` — design tokens, base styles, utilities.
+  No CSS modules or preprocessors.
 
 ## Content Collections
 
@@ -129,15 +107,5 @@ npm run preview   # Preview production build
 
 ## Deployment
 
-GitHub Pages from the `dist/` directory. Configure in repo Settings → Pages → Source: GitHub Actions (or deploy from `gh-pages` branch using a workflow).
-
-## Skills
-
-See `.claude/skills/` for task-specific instructions:
-- `add-paper.md` — Adding a paper to the QAME Paper Series
-- `add-publication.md` — Adding a peer-reviewed article
-- `add-team-member.md` — Adding a current or former member
-- `add-project.md` — Adding an ongoing project or grant
-- `add-software.md` — Adding a software project
-- `add-dataset.md` — Adding a dataset
-- `update-content.md` — Editing static copy (hero, research areas, contact)
+Pushes to `main` trigger `.github/workflows/deploy.yml` which builds and
+deploys to GitHub Pages via `actions/deploy-pages`. No manual deploy step needed.
