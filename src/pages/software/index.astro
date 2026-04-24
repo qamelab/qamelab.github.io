@@ -2,8 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import PageHero from '../../components/PageHero.astro';
-import LogoCard from '../../components/LogoCard.astro';
 import { getCollection } from 'astro:content';
 
 const software = (await getCollection('software'))
@@ -22,31 +20,38 @@ function extractHost(url: string): string {
 <Base title="Software">
   <Header active="software" />
 
-  <section class="section">
+  <section class="section" style="padding-top: var(--space-12);">
     <div class="container">
-      <PageHero label="Software" title="Tools & open-source infrastructure">
-        <p class="page-intro">
-          Open-source tools, libraries, and agentic infrastructure developed at
-          QAME Lab. All projects are public on GitHub and designed for
-          reproducible, local-first research.
-        </p>
-      </PageHero>
+      <p class="label">Software</p>
+      <h1 style="font-size: 32px; font-weight: 700;">Tools &amp; open-source infrastructure</h1>
+      <hr class="rule" />
+      <p class="page-intro">
+        Open-source tools, libraries, and agentic infrastructure developed at
+        QAME Lab. All projects are public on GitHub and designed for
+        reproducible, local-first research.
+      </p>
 
       {software.length > 0 ? (
-        <div class="card-grid">
+        <div class="software-grid">
           {software.map(item => (
-            <LogoCard
-              name={item.data.fullName ?? item.data.name}
-              subtitle={item.data.stack}
-              description={item.data.description}
-              logoColor={item.data.logoColor}
-              logoGradient={item.data.logoGradient}
-              logoText={item.data.logoText}
-              logoCase="lower"
-              logoFont="mono"
-              href={item.data.repo}
-              hrefLabel={extractHost(item.data.repo)}
-            />
+            <article class="sw-card">
+              <div class="sw-header">
+                <div
+                  class="sw-logo"
+                  style={`background: ${item.data.logoGradient ?? item.data.logoColor};`}
+                >
+                  {item.data.logoText ?? item.data.name.slice(0, 3).toLowerCase()}
+                </div>
+                <div class="sw-meta">
+                  <p class="sw-name">{item.data.fullName ?? item.data.name}</p>
+                  <p class="sw-stack">{item.data.stack}</p>
+                </div>
+              </div>
+              <p class="sw-desc">{item.data.description}</p>
+              <a href={item.data.repo} target="_blank" rel="noopener" class="sw-repo">
+                {extractHost(item.data.repo)} →
+              </a>
+            </article>
           ))}
         </div>
       ) : (
@@ -59,13 +64,77 @@ function extractHost(url: string): string {
 </Base>
 
 <style>
-  .card-grid {
+  .page-intro {
+    font-size: 15px;
+    color: var(--gray-700);
+    line-height: var(--leading-relaxed);
+    max-width: 40rem;
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .software-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
   }
 
+  .sw-card {
+    border: 1px solid var(--gray-100);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+  }
+  .sw-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .sw-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+  }
+  .sw-meta { flex: 1; }
+  .sw-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--black);
+    margin: 0;
+  }
+  .sw-stack {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    margin: 0;
+  }
+  .sw-desc {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin: 0 0 12px;
+    flex: 1;
+  }
+  .sw-repo {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    text-decoration: none;
+  }
+  .sw-repo:hover { color: var(--accent); }
+
+  .empty-note { color: var(--gray-500); font-style: italic; }
+
   @media (max-width: 768px) {
-    .card-grid { grid-template-columns: 1fr; }
+    .software-grid { grid-template-columns: 1fr; }
   }
 </style>

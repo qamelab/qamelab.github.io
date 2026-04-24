@@ -61,8 +61,8 @@ function yearRange(start: number, end?: number): string {
         ))}
         {hasMoreGrants && (
           <div id="more-grants" hidden>
-            {additionalGrants.map((grant, i) => (
-              <div class="grant-row" tabindex={i === 0 ? -1 : undefined}>
+            {additionalGrants.map(grant => (
+              <div class="grant-row">
                 <span class="grant-funder">{grant.data.funder}</span>
                 <div class="grant-body">
                   <p class="grant-title">{grant.data.title}</p>
@@ -75,13 +75,7 @@ function yearRange(start: number, end?: number): string {
         )}
       </div>
       {hasMoreGrants && (
-        <button
-          type="button"
-          id="show-more-grants"
-          class="show-more-btn"
-          aria-expanded="false"
-          aria-controls="more-grants"
-        >
+        <button type="button" id="show-more-grants" class="show-more-btn">
           Show all previous grants →
         </button>
       )}
@@ -95,10 +89,7 @@ function yearRange(start: number, end?: number): string {
   if (btn && more) {
     btn.addEventListener('click', () => {
       more.removeAttribute('hidden');
-      btn.setAttribute('aria-expanded', 'true');
       btn.style.display = 'none';
-      const firstRevealed = more.querySelector<HTMLElement>('.grant-row');
-      firstRevealed?.focus({ preventScroll: false });
     });
   }
 </script>

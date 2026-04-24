@@ -2,78 +2,39 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import PageHero from '../../components/PageHero.astro';
-import { getCollection, type CollectionEntry } from 'astro:content';
-import { readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-
-type TeamEntry = CollectionEntry<'team'>;
-type CurrentEntry = TeamEntry & { data: Extract<TeamEntry['data'], { status: 'current' }> };
-type AlumniEntry = TeamEntry & { data: Extract<TeamEntry['data'], { status: 'alumni' }> };
-
-const isCurrent = (m: TeamEntry): m is CurrentEntry => m.data.status === 'current';
-const isAlumni = (m: TeamEntry): m is AlumniEntry => m.data.status === 'alumni';
+import { getCollection } from 'astro:content';
 
 const everyone = await getCollection('team');
 
 const current = everyone
-  .filter(isCurrent)
+  .filter(m => m.data.status === 'current')
   .sort((a, b) => a.data.order - b.data.order);
 
-const humans = current.filter(m => m.data.kind !== 'agent');
-const agents = current.filter(m => m.data.kind === 'agent');
-
 const alumni = everyone
-  .filter(isAlumni)
-  .sort((a, b) => b.data.yearLeft - a.data.yearLeft);
+  .filter(m => m.data.status === 'alumni')
+  .sort((a, b) => (b.data.yearLeft ?? 0) - (a.data.yearLeft ?? 0));
 
 function deriveInitials(name: string): string {
   return name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
-}
-
-// Agent portraits have a fidelity report (step 5) with a short one-line
-// summary of what's visually in the image plus 3–5 "see ↔ represents"
-// pairs mapping image elements to self-reflection anchors. Read that at
-// build time — short summary for the `alt` attribute, full structure
-// for the hover overlay.
-type Pair = { see: string; represents: string };
-type Fidelity = { summary: string; pairs: Pair[] };
-
-function portraitFidelity(portraitPath: string | undefined, fallbackName: string): Fidelity {
-  const fallback: Fidelity = { summary: `Portrait of ${fallbackName}`, pairs: [] };
-  if (!portraitPath) return fallback;
-  const slug = portraitPath.split('/').pop()?.replace(/\.(png|jpe?g|webp)$/i, '');
-  if (!slug) return fallback;
-  const path = join(process.cwd(), 'scripts/personas/out/fidelity', `${slug}.json`);
-  if (!existsSync(path)) return fallback;
-  try {
-    const data = JSON.parse(readFileSync(path, 'utf8'));
-    return {
-      summary: (typeof data.summary === 'string' && data.summary.trim()) || fallback.summary,
-      pairs: Array.isArray(data.pairs)
-        ? data.pairs.filter((p: Pair) => p && typeof p.see === 'string' && typeof p.represents === 'string')
-        : [],
-    };
-  } catch {
-    return fallback;
-  }
 }
 ---
 
 <Base title="Team">
   <Header active="team" />
 
-  <section class="section">
+  <section class="section" style="padding-top: var(--space-12);">
     <div class="container">
-      <PageHero label="Team" title="People" />
+      <p class="label">Team</p>
+      <h1 style="font-size: 32px; font-weight: 700;">People</h1>
+      <hr class="rule" />
 
-      {humans.length > 0 && (
+      {current.length > 0 && (
         <div class="section-block">
-          <p class="label-accent">Current members (biological intelligence)</p>
+          <p class="label-accent">Current members</p>
           <div class="team-grid">
-            {humans.map(m => (
+            {current.map(m => (
               <article class="member-card">
-                <div class="avatar" aria-hidden="true">{m.data.initials ?? deriveInitials(m.data.name)}</div>
+                <div class="avatar">{m.data.initials ?? deriveInitials(m.data.name)}</div>
                 <p class="member-name">
                   {m.data.website ? (
                     <a href={m.data.website} target="_blank" rel="noopener">{m.data.name}</a>
@@ -89,52 +50,6 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
         </div>
       )}
 
-      {agents.length > 0 && (
-        <div class="section-block">
-          <p class="label-accent">Current members (digital intelligence)</p>
-          <div class="team-grid">
-            {agents.map(m => {
-              const fid = m.data.portrait ? portraitFidelity(m.data.portrait, m.data.name) : null;
-              return (
-                <article class="member-card member-card-agent">
-                  {m.data.portrait && fid ? (
-                    <figure class="portrait-figure">
-                      <img class="portrait" src={m.data.portrait} alt={fid.summary} width="600" height="600" loading="lazy" />
-                      <figcaption class="portrait-reflection" aria-hidden="true">
-                        <p class="portrait-summary">{fid.summary}</p>
-                        {fid.pairs.length > 0 && (
-                          <ul class="portrait-pairs">
-                            {fid.pairs.map(p => (
-                              <li>
-                                <span class="pair-see">{p.see}</span>
-                                <span class="pair-arrow"> — </span>
-                                <span class="pair-represents">{p.represents}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </figcaption>
-                    </figure>
-                  ) : (
-                    <div class="avatar avatar-agent" aria-hidden="true">{m.data.initials ?? deriveInitials(m.data.name)}</div>
-                  )}
-                  <p class="member-name">
-                    {m.data.website ? (
-                      <a href={m.data.website} target="_blank" rel="noopener">{m.data.name}</a>
-                    ) : (
-                      m.data.name
-                    )}
-                  </p>
-                  <p class="member-role">{m.data.role}</p>
-                  <p class="member-affiliation">{m.data.affiliation}</p>
-                  {m.data.description && <p class="member-description">{m.data.description}</p>}
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
       {alumni.length > 0 && (
         <div class="section-block">
           <p class="label-accent">Former members</p>
@@ -144,7 +59,7 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
                 <p class="alumni-name">{m.data.name}</p>
                 <p class="alumni-role">{m.data.alumniRole ?? m.data.role}</p>
                 <p class="alumni-current">{m.data.currentPosition ?? '—'}</p>
-                <p class="alumni-year">{m.data.yearLeft}</p>
+                <p class="alumni-year">{m.data.yearLeft ?? ''}</p>
               </div>
             ))}
           </div>
@@ -202,81 +117,6 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
   .member-affiliation {
     font-size: 11px;
     color: var(--gray-500);
-  }
-  .member-card-agent .member-affiliation {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.02em;
-  }
-  .avatar-agent {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    letter-spacing: -0.02em;
-  }
-  .portrait-figure {
-    position: relative;
-    margin: 0 0 12px;
-  }
-  .portrait {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    background: var(--gray-100);
-  }
-  .portrait-reflection {
-    position: absolute;
-    inset: 0;
-    background: rgba(17, 17, 17, 0.94);
-    color: #f5f0e8;
-    padding: var(--space-4);
-    overflow-y: auto;
-    opacity: 0;
-    transition: opacity 0.22s ease;
-    margin: 0;
-  }
-  .portrait-figure:hover .portrait-reflection,
-  .portrait-figure:focus-within .portrait-reflection {
-    opacity: 1;
-  }
-  :global([data-theme="dark"]) .portrait-reflection {
-    background: rgba(245, 240, 232, 0.96);
-    color: var(--black);
-  }
-  .portrait-summary {
-    font-size: 12px;
-    line-height: 1.5;
-    margin: 0 0 var(--space-3);
-    font-weight: 500;
-  }
-  .portrait-pairs {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 10.5px;
-    line-height: 1.5;
-    border-top: 1px solid rgba(245, 240, 232, 0.15);
-    padding-top: var(--space-3);
-  }
-  :global([data-theme="dark"]) .portrait-pairs {
-    border-top-color: rgba(17, 17, 17, 0.15);
-  }
-  .portrait-pairs li {
-    margin-bottom: 8px;
-  }
-  .portrait-pairs li:last-child { margin-bottom: 0; }
-  .pair-see {
-    color: var(--accent);
-  }
-  .pair-arrow {
-    opacity: 0.5;
-  }
-  .member-description {
-    font-size: 12px;
-    color: var(--gray-700);
-    margin: var(--space-2) 0 0;
-    line-height: 1.5;
   }
 
   .alumni-list {
