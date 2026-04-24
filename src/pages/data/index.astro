@@ -2,6 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import LogoCard from '../../components/LogoCard.astro';
 import { getCollection } from 'astro:content';
 
 const datasets = (await getCollection('data'))
@@ -11,42 +13,35 @@ const datasets = (await getCollection('data'))
 <Base title="Data">
   <Header active="data" />
 
-  <section class="section" style="padding-top: var(--space-12);">
+  <section class="section">
     <div class="container">
-      <p class="label">Data</p>
-      <h1 style="font-size: 32px; font-weight: 700;">Datasets &amp; research resources</h1>
-      <hr class="rule" />
-      <p class="page-intro">
-        Curated datasets, annotated corpora, and derived resources from
-        QAME Lab research. All datasets are archived on Zenodo with a persistent
-        DOI and released under open licenses where legally possible.
-      </p>
+      <PageHero label="Data" title="Datasets & research resources">
+        <p class="page-intro">
+          Curated datasets, annotated corpora, and derived resources from
+          QAME Lab research. All datasets are archived on Zenodo with a persistent
+          DOI and released under open licenses where legally possible.
+        </p>
+      </PageHero>
 
       {datasets.length > 0 ? (
-        <div class="data-grid">
-          {datasets.map(item => (
-            <article class="data-card">
-              <div class="data-header">
-                <div class="data-logo" style={`background: ${item.data.logoColor};`}>
-                  {item.data.logoText ?? item.data.name.slice(0, 3).toUpperCase()}
-                </div>
-                <div class="data-meta">
-                  <p class="data-name">{item.data.name}</p>
-                  <p class="data-format">{item.data.format}</p>
-                </div>
-              </div>
-              <p class="data-desc">{item.data.description}</p>
-              {item.data.doi ? (
-                <a href={`https://doi.org/${item.data.doi}`} target="_blank" rel="noopener" class="data-link">
-                  doi.org/{item.data.doi} →
-                </a>
-              ) : item.data.url ? (
-                <a href={item.data.url} target="_blank" rel="noopener" class="data-link">
-                  Details →
-                </a>
-              ) : null}
-            </article>
-          ))}
+        <div class="card-grid">
+          {datasets.map(item => {
+            const doiHref = item.data.doi ? `https://doi.org/${item.data.doi}` : undefined;
+            const href = doiHref ?? item.data.url;
+            const hrefLabel = item.data.doi ? `doi.org/${item.data.doi}` : href ? 'Details' : undefined;
+            return (
+              <LogoCard
+                name={item.data.name}
+                subtitle={item.data.format}
+                description={item.data.description}
+                logoColor={item.data.logoColor}
+                logoText={item.data.logoText}
+                logoCase="upper"
+                href={href}
+                hrefLabel={hrefLabel}
+              />
+            );
+          })}
         </div>
       ) : (
         <p class="empty-note">Datasets will be listed here once they have persistent DOIs.</p>
@@ -58,76 +53,13 @@ const datasets = (await getCollection('data'))
 </Base>
 
 <style>
-  .page-intro {
-    font-size: 15px;
-    color: var(--gray-700);
-    line-height: var(--leading-relaxed);
-    max-width: 40rem;
-    margin-top: var(--space-4);
-    margin-bottom: var(--space-8);
-  }
-
-  .data-grid {
+  .card-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
   }
 
-  .data-card {
-    border: 1px solid var(--gray-100);
-    padding: var(--space-5);
-    display: flex;
-    flex-direction: column;
-  }
-  .data-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  .data-logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-  .data-meta { flex: 1; }
-  .data-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--black);
-    margin: 0;
-  }
-  .data-format {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--gray-500);
-    margin: 0;
-  }
-  .data-desc {
-    font-size: 13px;
-    color: var(--gray-700);
-    line-height: 1.55;
-    margin: 0 0 12px;
-    flex: 1;
-  }
-  .data-link {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--gray-500);
-    text-decoration: none;
-  }
-  .data-link:hover { color: var(--accent); }
-
-  .empty-note { color: var(--gray-500); font-style: italic; }
-
   @media (max-width: 768px) {
-    .data-grid { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
   }
 </style>

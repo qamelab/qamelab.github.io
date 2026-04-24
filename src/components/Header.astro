@@ -17,38 +17,74 @@ const navItems = [
 <header class="site-header">
   <div class="container header-inner">
     <div class="header-left">
-      <a href="/" class="logo-link">
-        <span class="logo-text">QAME</span>
-        <span class="logo-suffix">Lab</span>
+      <a href="/" class="logo-link" aria-label="QAME Lab — home">
+        <span class="logo-row">
+          <span class="logo-text">QAME</span>
+          <span class="logo-suffix">Lab</span>
+        </span>
+        <span class="logo-rule" aria-hidden="true"></span>
       </a>
       <span class="header-divider"></span>
       <a
-        href="https://www.bfh.ch/en/research/research-areas/applied-data-science-and-finance/"
+        href="https://www.bfh.ch/en/research/research-areas/institut-applied-data-science-and-finance/"
         class="affiliation"
         target="_blank"
         rel="noopener"
       >
-        Institute for Applied Data Science &amp; Finance
+        Hosted by the Institute for Applied Data Science &amp; Finance
         <span class="affiliation-org">Bern University of Applied Sciences</span>
       </a>
     </div>
     <nav class="header-nav">
       {navItems.map(item => (
-        <a href={item.href} class:list={["nav-link", { active: active === item.key }]}>
+        <a
+          href={item.href}
+          class:list={["nav-link", { active: active === item.key }]}
+          aria-current={active === item.key ? 'page' : undefined}
+        >
           {item.label}
         </a>
       ))}
+      <button
+        id="theme-toggle"
+        type="button"
+        class="theme-toggle"
+        aria-label="Toggle dark mode"
+        title="Toggle dark mode"
+      >
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
     </nav>
   </div>
 </header>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const current = document.documentElement.dataset.theme;
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (_) {}
+      btn.setAttribute('aria-label', `Switch to ${next === 'dark' ? 'light' : 'dark'} mode`);
+    });
+  }
+</script>
 
 <style>
   .site-header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--surface-translucent);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--gray-100);
   }
 
@@ -66,21 +102,33 @@ const navItems = [
   }
 
   .logo-link {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    text-decoration: none;
+  }
+  .logo-row {
     display: flex;
     align-items: baseline;
     gap: 4px;
-    text-decoration: none;
   }
   .logo-text {
     font-size: 18px;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
     color: var(--black);
   }
   .logo-suffix {
     font-size: 18px;
     font-weight: 300;
-    color: var(--gray-500);
+    color: var(--gray-300);
+  }
+  .logo-rule {
+    display: block;
+    width: 12px;
+    height: 2px;
+    background: var(--accent);
   }
 
   .header-divider {
@@ -105,7 +153,26 @@ const navItems = [
   .header-nav {
     display: flex;
     gap: 22px;
+    align-items: center;
   }
+
+  .theme-toggle {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin-left: 8px;
+    cursor: pointer;
+    color: var(--gray-500);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s;
+  }
+  .theme-toggle:hover { color: var(--black); }
+  .theme-toggle .icon-sun  { display: none; }
+  .theme-toggle .icon-moon { display: inline; }
+  :global([data-theme="dark"]) .theme-toggle .icon-sun  { display: inline; }
+  :global([data-theme="dark"]) .theme-toggle .icon-moon { display: none; }
   .nav-link {
     font-size: 13px;
     font-weight: 500;

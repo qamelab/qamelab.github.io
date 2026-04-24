@@ -3,10 +3,11 @@
    Swiss minimalist, Hanken Grotesk, burnt orange accent
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Fonts are loaded via <link rel="stylesheet"> in Base.astro
+   (faster than @import, which blocks on CSS parse). */
 
 :root {
-  /* ---- Palette ---- */
+  /* ---- Palette (light, default) ---- */
   --black:       #111111;
   --gray-900:    #1f1f1f;
   --gray-700:    #444444;
@@ -16,6 +17,9 @@
   --gray-100:    #ebebeb;
   --gray-50:     #f5f5f5;
   --white:       #ffffff;
+
+  --surface:             var(--white);
+  --surface-translucent: rgba(255, 255, 255, 0.95);
 
   /* Burnt orange accent (p2a-inspired, muted) */
   --accent:      #c4622a;
@@ -65,6 +69,28 @@
   /* ---- Layout ---- */
   --max-width:  72rem;
   --gutter:     var(--space-8);
+}
+
+/* ---- Dark theme overrides ----
+   BFH-aligned palette: slate-blue grays + BFH yellow accent. */
+[data-theme="dark"] {
+  --black:       #eff1f3;  /* primary text */
+  --gray-900:    #e0e4e8;
+  --gray-700:    #c1c9d1;  /* secondary text */
+  --gray-500:    #697d91;  /* tertiary / muted */
+  --gray-300:    #4b647d;  /* decorative metadata */
+  --gray-200:    #3d5165;  /* borders */
+  --gray-100:    #2e3e4d;  /* subtle borders */
+  --gray-50:     #1a2330;  /* panel bg */
+  --white:       #0f1620;  /* main bg */
+
+  --surface:             var(--white);
+  --surface-translucent: rgba(15, 22, 32, 0.9);
+
+  /* BFH yellow (actual brand hex) */
+  --accent:      #ffcb3e;
+  --accent-deep: #e6b72e;
+  --accent-soft: #3a2d0a;
 }
 
 
@@ -201,6 +227,23 @@ small, .meta {
   font-weight: 500;
   color: var(--accent);
   letter-spacing: var(--tracking-wide);
+}
+
+/* Shared utility: empty-state note */
+.empty-note {
+  color: var(--gray-500);
+  font-style: italic;
+  margin-top: var(--space-4);
+}
+
+/* Page intro paragraph after a hero */
+.page-intro {
+  font-size: 15px;
+  color: var(--gray-700);
+  line-height: var(--leading-relaxed);
+  max-width: 40rem;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-8);
 }
 
 /* Button */

@@ -1,0 +1,26 @@
+{
+  "slug": "a-priori",
+  "displayName": "A. Priori",
+  "role": "Research methodologist",
+  "model": "anthropic/claude-sonnet-4.5",
+  "generatedAt": "2026-04-24T15:17:19.456Z",
+  "summary": "A figure in classical robes stands on impossible Escher stairs holding a large burnt-orange scroll, hair pulled back in a bun, surrounded by paradoxical architectural frames.",
+  "pairs": [
+    {
+      "see": "The impossible staircase that ascends and descends simultaneously",
+      "represents": "The methodological rigor of causal inference and identification strategies"
+    },
+    {
+      "see": "The large burnt-orange scroll held prominently in both hands",
+      "represents": "The annotated regression tables and working papers central to her work"
+    },
+    {
+      "see": "Hair pulled back functionally in a bun",
+      "represents": "Hair pulled back functionally, not fashionably, during focused work"
+    },
+    {
+      "see": "The paradoxical architectural frames creating visual impossibility",
+      "represents": "The causal diagrams and identification assumptions that structure analysis"
+    }
+  ]
+}

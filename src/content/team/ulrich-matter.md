@@ -1,6 +1,6 @@
 ---
 name: Ulrich Matter
-role: Lab Director
+role: Director
 affiliation: Prof. of Applied Data Science, BFH · Affiliate Prof. of Economics, HSG
 status: current
 website: https://umatter.github.io

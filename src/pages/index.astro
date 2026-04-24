@@ -1,42 +1,58 @@
 ---
 import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ResearchAreas from '../components/ResearchAreas.astro';
+import ProjectsGrants from '../components/ProjectsGrants.astro';
+import FeedSidebar from '../components/FeedSidebar.astro';
+import { site } from '../config/site';
 ---
 
-<Base title="QAME Lab" description="Quantitative Agentic & Media Economics — Research lab at the Institute for Applied Data Science & Finance, BFH. Coming soon.">
-  <main class="landing">
-    <div class="landing-content">
-      <p class="kicker">Quantitative Agentic &amp; Media Economics</p>
-      <h1>QAME <span class="light">Lab</span></h1>
-      <hr class="rule" />
-      <p class="lead">
-        We study how AI and media shape economic decisions and information flows —
-        and what that means for politics, society, and the economy.
-      </p>
-      <p class="status">Website under construction.</p>
-      <div class="affiliation">
-        <p>
-          Hosted by the
-          <a href="https://www.bfh.ch/en/research/research-areas/institut-applied-data-science-and-finance/" target="_blank" rel="noopener">Institute for Applied Data Science &amp; Finance</a>,
-          <a href="https://www.bfh.ch/" target="_blank" rel="noopener">Bern University of Applied Sciences</a>.
+<Base title={site.name} description={site.description}>
+  <Header active="research" />
+
+  <section class="section hero-section">
+    <div class="container hero-grid">
+      <div class="hero-main">
+        <p class="kicker">{site.fullName}</p>
+        <h1 class="hero-title">QAME <span class="light">Lab</span></h1>
+        <hr class="rule" />
+        <p class="lead">
+          We study how AI and media shape economic decisions and information
+          flows — and what that means for politics, society, and the economy.
         </p>
+
+        <div class="research-wrap">
+          <ResearchAreas />
+        </div>
       </div>
-      <div class="contact">
-        <a href="mailto:qamelab@qamelab.org">qamelab@qamelab.org</a>
-      </div>
+      <aside class="hero-side">
+        <FeedSidebar />
+      </aside>
     </div>
-  </main>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <ProjectsGrants />
+    </div>
+  </section>
+
+  <Footer />
 </Base>
 
 <style>
-  .landing {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: var(--space-8);
+  .hero-section {
+    padding-top: var(--space-14);
   }
-  .landing-content {
-    max-width: 34rem;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .hero-main {
+    max-width: 40rem;
   }
   .kicker {
     font-size: 11px;
@@ -46,14 +62,14 @@ import Base from '../layouts/Base.astro';
     color: var(--accent-deep);
     margin-bottom: 12px;
   }
-  h1 {
+  .hero-title {
     font-size: 52px;
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.05;
     margin-bottom: 0;
   }
-  h1 .light {
+  .hero-title .light {
     font-weight: 300;
     color: var(--gray-500);
   }
@@ -61,46 +77,22 @@ import Base from '../layouts/Base.astro';
     font-size: 17px;
     color: var(--gray-700);
     line-height: var(--leading-relaxed);
-    margin-bottom: var(--space-6);
-  }
-  .status {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: var(--tracking-wide);
+    margin-top: var(--space-4);
     margin-bottom: var(--space-10);
   }
-  .affiliation {
-    font-size: 12px;
-    color: var(--gray-500);
-    line-height: 1.6;
-    margin-bottom: var(--space-4);
-  }
-  .affiliation a {
-    color: var(--gray-500);
-    text-decoration-color: var(--gray-300);
-  }
-  .affiliation a:hover { color: var(--black); }
-  .contact {
-    font-size: 12px;
-    color: var(--gray-500);
-  }
-  .contact a {
-    color: var(--gray-700);
-    text-decoration: none;
-  }
-  .contact a:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--accent);
-  }
-  .sep {
-    margin: 0 6px;
-    color: var(--gray-300);
+
+  .research-wrap {
+    margin-top: var(--space-8);
   }
 
-  @media (max-width: 768px) {
-    h1 { font-size: 36px; }
-    .lead { font-size: 15px; }
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+    .hero-title { font-size: 44px; }
+  }
+  @media (max-width: 640px) {
+    .hero-title { font-size: 36px; }
   }
 </style>

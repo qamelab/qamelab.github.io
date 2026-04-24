@@ -5,10 +5,23 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "check": "astro check",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "fetch:social": "node scripts/fetch-social.mjs",
+    "personas:self": "node scripts/personas/01-self-portrait.mjs",
+    "personas:compose": "node scripts/personas/02-compose-prompt.mjs",
+    "personas:portrait": "node scripts/personas/03-generate-portrait.mjs",
+    "personas:describe": "node scripts/personas/04-describe-image.mjs",
+    "personas:fidelity": "node scripts/personas/05-fidelity-check.mjs",
+    "personas:all": "npm run personas:self && npm run personas:compose && npm run personas:portrait && npm run personas:describe && npm run personas:fidelity"
   },
   "dependencies": {
     "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/sitemap": "^3.7.2",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,9 +1,9 @@
 ---
 name: Keim
-stack: "Python · AgentSpec"
-description: "Agentic seed repo framework. Scaffolds reproducible AI-assisted research with bidirectional YAML specs that compile to prompts and test suites."
-repo: https://github.com/qamelab/keim
+stack: "Python · MCP"
+description: "Transparent AI-driven research framework — seed repositories plus an agent orchestration layer that makes every step of an AI-assisted study auditable and re-runnable."
+repo: https://github.com/umatter/keim
 logoColor: "#c4622a"
 logoText: K
-order: 6
+order: 7
 ---

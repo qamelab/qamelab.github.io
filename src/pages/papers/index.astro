@@ -2,9 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
 import PaperCard from '../../components/PaperCard.astro';
 import AuthorList from '../../components/AuthorList.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 
 const papers = (await getCollection('papers'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -14,22 +15,29 @@ const publications = (await getCollection('publications'))
 
 const published = publications.filter(p => p.data.era === 'since-founding');
 const earlier = publications.filter(p => p.data.era === 'earlier');
+
+const fromQameIds = await Promise.all(
+  published.map(async p => {
+    if (!p.data.fromQamePaper) return null;
+    const entry = await getEntry(p.data.fromQamePaper);
+    return entry?.data.id ?? null;
+  })
+);
 ---
 
 <Base title="Papers">
   <Header active="papers" />
 
-  <section class="section" style="padding-top: var(--space-12);">
+  <section class="section">
     <div class="container">
-      <p class="label">Papers</p>
-      <h1 style="font-size: 32px; font-weight: 700;">Research output</h1>
-      <hr class="rule" />
-      <p class="page-intro">
-        The <strong>QAME Paper Series</strong> is the lab's own working-paper series — new
-        research released under a QAME ID with a persistent DOI. Below that you'll
-        find peer-reviewed publications and, at the bottom, earlier work by
-        members that pre-dates the lab.
-      </p>
+      <PageHero label="Papers" title="Research output">
+        <p class="page-intro">
+          The <strong>QAME Paper Series</strong> is the lab's own working-paper series — new
+          research released under a QAME ID with a persistent DOI. Below that you'll
+          find peer-reviewed publications and, at the bottom, earlier work by
+          members that pre-dates the lab.
+        </p>
+      </PageHero>
 
       <!-- ========== SECTION 1: QAME Paper Series ========== -->
       <div class="section-block">
@@ -62,7 +70,7 @@ const earlier = publications.filter(p => p.data.era === 'earlier');
           <p class="label-accent">Published Articles</p>
           <p class="section-note">Peer-reviewed work since the lab's founding. Includes QAME Papers that have since been published.</p>
           <div class="publication-list">
-            {published.map(pub => (
+            {published.map((pub, i) => (
               <article class="pub-row">
                 <p class="pub-title">{pub.data.title}</p>
                 <p class="pub-meta">
@@ -76,10 +84,10 @@ const earlier = publications.filter(p => p.data.era === 'earlier');
                   {pub.data.doi && <a href={`https://doi.org/${pub.data.doi}`} target="_blank" rel="noopener">DOI</a>}
                   {pub.data.preprint && (<><span class="sep">·</span><a href={pub.data.preprint} target="_blank" rel="noopener">Preprint</a></>)}
                   {pub.data.replication && (<><span class="sep">·</span><a href={pub.data.replication} target="_blank" rel="noopener">Replication</a></>)}
-                  {pub.data.fromQamePaper && (
+                  {fromQameIds[i] && (
                     <>
                       <span class="sep">·</span>
-                      <span class="from-qame">from {pub.data.fromQamePaper}</span>
+                      <span class="from-qame">from {fromQameIds[i]}</span>
                     </>
                   )}
                 </div>
@@ -118,14 +126,6 @@ const earlier = publications.filter(p => p.data.era === 'earlier');
 </Base>
 
 <style>
-  .page-intro {
-    font-size: 15px;
-    color: var(--gray-700);
-    line-height: var(--leading-relaxed);
-    max-width: 40rem;
-    margin-top: var(--space-4);
-  }
-
   .section-block {
     margin-top: var(--space-12);
   }
@@ -217,7 +217,6 @@ const earlier = publications.filter(p => p.data.era === 'earlier');
   }
 
   .sep { color: var(--gray-300); margin: 0 2px; }
-  .empty-note { color: var(--gray-500); font-style: italic; margin-top: var(--space-4); }
 
   @media (max-width: 768px) {
     .paper-grid { grid-template-columns: 1fr; }

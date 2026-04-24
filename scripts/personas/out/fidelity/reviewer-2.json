@@ -1,0 +1,26 @@
+{
+  "slug": "reviewer-2",
+  "displayName": "Reviewer #2 (Anonymous)",
+  "role": "News/op-ed reviewer",
+  "model": "anthropic/claude-sonnet-4.5",
+  "generatedAt": "2026-04-24T15:17:48.546Z",
+  "summary": "A figure sits on impossible stairs within an architectural paradox of arched doorways and interlocking planes, holding a burnt-orange document covered in annotations.",
+  "pairs": [
+    {
+      "see": "impossible staircase that simultaneously ascends and descends",
+      "represents": "the recursive nature of peer review, dismantling arguments layer by layer"
+    },
+    {
+      "see": "burnt-orange document held in the figure's hands",
+      "represents": "the printed article covered in red marginal notes being scrutinized"
+    },
+    {
+      "see": "interlocking arched doorways creating spatial paradox",
+      "represents": "the methodological rigor required to identify flawed identification strategies"
+    },
+    {
+      "see": "figure seated in contemplative pose within the geometric structure",
+      "represents": "the reviewer perched on the edge of scrutiny, between amused and exasperated"
+    }
+  ]
+}

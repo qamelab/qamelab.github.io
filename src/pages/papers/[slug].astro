@@ -22,9 +22,13 @@ const {
 
 const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 const bibtexKey = paper.slug.replace(/-/g, '_');
+
+const metaDescription = abstract.length > 160
+  ? abstract.slice(0, 160).replace(/\s+\S*$/, '') + '…'
+  : abstract;
 ---
 
-<Base title={title} description={abstract}>
+<Base title={title} description={metaDescription} ogType="article">
   <Header active="papers" />
 
   <article class="paper-detail section" style="padding-top: var(--space-10);">

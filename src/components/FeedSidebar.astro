@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { site } from '../config/site';
 
 const allPosts = await getCollection('news');
 const posts = allPosts
@@ -33,9 +34,14 @@ function timeAgo(date: Date): string {
           <p class="feed-text">{post.data.text}</p>
         </a>
       ))}
-      <a href="https://bsky.app/profile/qamelab.bsky.social" target="_blank" rel="noopener" class="feed-more">
-        See more →
-      </a>
+      <p class="feed-more">
+        Follow on
+        <a href={site.social.bluesky.profileUrl} target="_blank" rel="noopener me">Bluesky</a>
+        ·
+        <a href={site.social.mastodon.profileUrl} target="_blank" rel="noopener me">Mastodon</a>
+        ·
+        <a href={site.social.x.profileUrl} target="_blank" rel="noopener me">X</a>
+      </p>
     </>
   ) : (
     <p class="feed-empty">Feed will populate once the lab's Bluesky account is active.</p>
@@ -95,13 +101,15 @@ function timeAgo(date: Date): string {
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--gray-500);
-    text-decoration: none;
-    display: block;
     padding-top: 4px;
+    margin: 0;
   }
-  .feed-more:hover {
-    color: var(--accent);
+  .feed-more a {
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.15s;
   }
+  .feed-more a:hover { color: var(--accent); }
 
   .feed-empty {
     font-size: 12px;

@@ -1,9 +1,9 @@
 ---
 name: Litmus
-stack: "JavaScript · Cloudflare Workers"
-description: "LLM-driven quiz tool for business analytics courses. Auto-generated questions, scored responses, zero-infrastructure hosting."
-repo: https://github.com/qamelab/litmus
+stack: "React · Cloudflare Workers"
+description: "LLM-driven quiz platform for data-analytics courses. Community-curated topic catalogue, e-ink friendly, zero-infrastructure hosting via Cloudflare Workers."
+repo: https://github.com/umatter/litmus
 logoColor: "#1a5276"
 logoText: L
-order: 2
+order: 3
 ---

@@ -1,4 +1,4 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, reference, z } from 'astro:content';
 
 const papers = defineCollection({
   type: 'content',
@@ -14,7 +14,7 @@ const papers = defineCollection({
     doi: z.string().optional(),
     arxiv: z.string().optional(),
     ssrn: z.string().optional(),
-    replication: z.string().optional(),
+    replication: z.string().url().optional(),
   }),
 });
 
@@ -27,29 +27,40 @@ const publications = defineCollection({
     venue: z.string(),
     year: z.number(),
     date: z.coerce.date().optional(),
-    fromQamePaper: z.string().optional(),
+    fromQamePaper: reference('papers').optional(),
     doi: z.string().optional(),
-    preprint: z.string().optional(),
-    replication: z.string().optional(),
+    preprint: z.string().url().optional(),
+    replication: z.string().url().optional(),
     era: z.enum(['since-founding', 'earlier']).default('since-founding'),
   }),
 });
 
 const team = defineCollection({
   type: 'content',
-  schema: z.object({
-    name: z.string(),
-    role: z.string(),
-    affiliation: z.string(),
-    status: z.enum(['current', 'alumni']).default('current'),
-    website: z.string().optional(),
-    email: z.string().optional(),
-    initials: z.string().optional(),
-    order: z.number().default(10),
-    alumniRole: z.string().optional(),
-    currentPosition: z.string().optional(),
-    yearLeft: z.number().optional(),
-  }),
+  schema: z.discriminatedUnion('status', [
+    z.object({
+      status: z.literal('current').default('current'),
+      kind: z.enum(['human', 'agent']).default('human'),
+      name: z.string(),
+      role: z.string(),
+      affiliation: z.string(),
+      website: z.string().url().optional(),
+      email: z.string().email().optional(),
+      initials: z.string().optional(),
+      description: z.string().optional(),
+      portrait: z.string().optional(),
+      order: z.number().default(10),
+    }),
+    z.object({
+      status: z.literal('alumni'),
+      name: z.string(),
+      role: z.string(),
+      affiliation: z.string(),
+      alumniRole: z.string().optional(),
+      currentPosition: z.string().optional(),
+      yearLeft: z.number(),
+    }),
+  ]),
 });
 
 const projects = defineCollection({
@@ -84,7 +95,7 @@ const software = defineCollection({
     fullName: z.string().optional(),
     stack: z.string(),
     description: z.string(),
-    repo: z.string(),
+    repo: z.string().url(),
     logoColor: z.string().default('#c4622a'),
     logoText: z.string().optional(),
     logoGradient: z.string().optional(),
@@ -99,7 +110,7 @@ const data = defineCollection({
     format: z.string(),
     description: z.string(),
     doi: z.string().optional(),
-    url: z.string().optional(),
+    url: z.string().url().optional(),
     logoColor: z.string().default('#444'),
     logoText: z.string().optional(),
     order: z.number().default(10),
@@ -111,7 +122,7 @@ const news = defineCollection({
   schema: z.object({
     platform: z.enum(['bluesky', 'mastodon']),
     text: z.string(),
-    url: z.string(),
+    url: z.string().url(),
     postedAt: z.coerce.date(),
   }),
 });

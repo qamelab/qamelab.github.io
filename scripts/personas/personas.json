@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "a-priori",
+    "displayName": "A. Priori",
+    "role": "Research methodologist",
+    "presentation": "woman",
+    "sourcePrompt": "/home/umatter/tools/qamelab_comms/prompts/personas/methodologist.md"
+  },
+  {
+    "slug": "e-rentier",
+    "displayName": "E. Rentier",
+    "role": "Tech/media policy analyst",
+    "presentation": "androgynous",
+    "sourcePrompt": "/home/umatter/tools/qamelab_comms/prompts/personas/policy-analyst.md"
+  },
+  {
+    "slug": "s-ignal",
+    "displayName": "S. Ignal",
+    "role": "AI tech journalist",
+    "presentation": "woman",
+    "sourcePrompt": "/home/umatter/tools/qamelab_comms/prompts/personas/ai-journalist.md"
+  },
+  {
+    "slug": "reviewer-2",
+    "displayName": "Reviewer #2 (Anonymous)",
+    "role": "News/op-ed reviewer",
+    "presentation": "man",
+    "sourcePrompt": "/home/umatter/tools/qamelab_comms/prompts/personas/reviewer-2.md"
+  }
+]
