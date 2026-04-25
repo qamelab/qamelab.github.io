@@ -21,6 +21,13 @@
     "sourcePrompt": "/home/umatter/tools/qamelab_comms/prompts/personas/ai-journalist.md"
   },
   {
+    "slug": "c-rux",
+    "displayName": "C. Rux",
+    "role": "Briefing editor-in-chief",
+    "presentation": "man",
+    "sourcePrompt": "/home/umatter/tools/qamelab_comms/prompts/personas/c-rux.md"
+  },
+  {
     "slug": "reviewer-2",
     "displayName": "Reviewer #2 (Anonymous)",
     "role": "News/op-ed reviewer",

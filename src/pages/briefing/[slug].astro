@@ -1,0 +1,210 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const briefings = await getCollection('briefings');
+  return briefings.map(b => ({ params: { slug: b.slug }, props: { entry: b } }));
+}
+
+interface Props { entry: CollectionEntry<'briefings'>; }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const all = (await getCollection('briefings'))
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+const idx = all.findIndex(b => b.slug === entry.slug);
+const prev = idx > 0 ? all[idx - 1] : null;
+const next = idx < all.length - 1 ? all[idx + 1] : null;
+
+const dateFmt = new Intl.DateTimeFormat('en-GB', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Base title={entry.data.title ?? `Briefing — ${isoDate(entry.data.date)}`}>
+  <Header active="briefing" />
+
+  <section class="section">
+    <div class="container">
+      <PageHero
+        label={`Briefing · ${isoDate(entry.data.date)}`}
+        title={entry.data.title ?? dateFmt.format(entry.data.date)}
+      >
+        {entry.data.summary && <p class="page-intro">{entry.data.summary}</p>}
+        <p class="meta-line">
+          {entry.data.byline && <span>{entry.data.byline}</span>}
+          {entry.data.tags && entry.data.tags.length > 0 && (
+            <>
+              {entry.data.byline && <span class="sep">·</span>}
+              <span class="tags">
+                {entry.data.tags.map((t, i) => (
+                  <>
+                    {i > 0 && <span class="tag-sep">·</span>}
+                    <span class="tag">{t}</span>
+                  </>
+                ))}
+              </span>
+            </>
+          )}
+        </p>
+      </PageHero>
+
+      <article class="briefing-prose">
+        <Content />
+      </article>
+
+      <nav class="briefing-nav" aria-label="Briefing navigation">
+        {prev ? (
+          <a class="briefing-nav-link prev" href={`/briefing/${prev.slug}/`}>
+            <span class="nav-direction">← Previous</span>
+            <span class="nav-target">{isoDate(prev.data.date)}</span>
+          </a>
+        ) : <span></span>}
+        <a class="briefing-nav-link index" href="/briefing/">All briefings</a>
+        {next ? (
+          <a class="briefing-nav-link next" href={`/briefing/${next.slug}/`}>
+            <span class="nav-direction">Next →</span>
+            <span class="nav-target">{isoDate(next.data.date)}</span>
+          </a>
+        ) : <span></span>}
+      </nav>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .meta-line {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-top: var(--space-2);
+  }
+  .meta-line .sep { margin: 0 6px; color: var(--gray-300); }
+  .meta-line .tag-sep { margin: 0 4px; color: var(--gray-300); }
+
+  .briefing-prose {
+    max-width: 40rem;
+    margin: var(--space-10) auto 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+  .briefing-prose :global(h2) {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.25;
+    margin: var(--space-12) 0 var(--space-2);
+    letter-spacing: -0.01em;
+  }
+  .briefing-prose :global(h2::before) {
+    content: "";
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    margin-bottom: var(--space-3);
+  }
+  .briefing-prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .briefing-prose :global(h3) {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--black);
+    margin: var(--space-8) 0 var(--space-2);
+  }
+  .briefing-prose :global(p) {
+    margin: 0 0 var(--space-4);
+  }
+  .briefing-prose :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  .briefing-prose :global(a:hover) {
+    color: var(--accent-deep);
+  }
+  .briefing-prose :global(strong) {
+    color: var(--black);
+    font-weight: 600;
+  }
+  /* Sources line: a paragraph that starts with **Sources:** renders in mono */
+  .briefing-prose :global(p:has(> strong:first-child:only-of-type)) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.6;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .briefing-prose :global(p:has(> strong:first-child:only-of-type) strong) {
+    color: var(--gray-700);
+  }
+  .briefing-prose :global(p:has(> strong:first-child:only-of-type) a) {
+    color: var(--gray-500);
+    text-decoration: none;
+  }
+  .briefing-prose :global(p:has(> strong:first-child:only-of-type) a:hover) {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .briefing-prose :global(hr) {
+    border: none;
+    border-top: 1px solid var(--gray-100);
+    margin: var(--space-12) 0;
+  }
+  .briefing-prose :global(blockquote) {
+    margin: var(--space-5) 0;
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--accent);
+    color: var(--gray-700);
+    font-style: italic;
+  }
+
+  .briefing-nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-14);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--gray-100);
+    align-items: center;
+  }
+  .briefing-nav-link {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--gray-700);
+  }
+  .briefing-nav-link.next { text-align: right; }
+  .briefing-nav-link.index {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    text-align: center;
+  }
+  .briefing-nav-link:hover { color: var(--accent); }
+  .nav-direction {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+  .nav-target {
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .briefing-prose { font-size: 14px; }
+  }
+</style>

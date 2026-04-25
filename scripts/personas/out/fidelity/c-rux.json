@@ -1,0 +1,30 @@
+{
+  "slug": "c-rux",
+  "displayName": "C. Rux",
+  "role": "Briefing editor-in-chief",
+  "model": "anthropic/claude-sonnet-4.5",
+  "generatedAt": "2026-04-25T10:27:18.101Z",
+  "summary": "A figure in striped clothing stands at the center of an impossible staircase structure that loops paradoxically upward and downward, holding an unfurled burnt-orange scroll.",
+  "pairs": [
+    {
+      "see": "The impossible staircase that ascends and descends simultaneously in a paradoxical loop",
+      "represents": "The work of reading across contradictory narratives and sources that should not align"
+    },
+    {
+      "see": "The figure positioned at the central junction where staircases meet",
+      "represents": "The watchful editor who notices the seam where stories do not connect"
+    },
+    {
+      "see": "The burnt-orange scroll unfurled and held by the figure",
+      "represents": "The legal pad covered in shorthand that forces the eye to slow"
+    },
+    {
+      "see": "The striped pattern of the figure's clothing creating visual lines",
+      "represents": "The practical, forgettable uniform of gray and linen worn for work"
+    },
+    {
+      "see": "The geometric frame structure containing the paradoxical space",
+      "represents": "The bare white wall absent of flags or tribal insignia"
+    }
+  ]
+}

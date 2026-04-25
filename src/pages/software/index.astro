@@ -6,7 +6,13 @@ import PageHero from '../../components/PageHero.astro';
 import LogoCard from '../../components/LogoCard.astro';
 import { getCollection } from 'astro:content';
 
+// Whitelist of software entries to surface on the public page.
+// Keep unlisted entries as markdown files in src/content/software/ so we
+// can re-enable them by adding their slug here.
+const FEATURED = new Set(['p2a', 'litmus', 'dschyyra', 'keim']);
+
 const software = (await getCollection('software'))
+  .filter(item => FEATURED.has(item.id.replace(/\.md$/, '')))
   .sort((a, b) => a.data.order - b.data.order);
 
 function extractHost(url: string): string {

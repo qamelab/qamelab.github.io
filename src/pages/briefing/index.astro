@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getCollection } from 'astro:content';
+
+const briefings = (await getCollection('briefings'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const dateFmt = new Intl.DateTimeFormat('en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Base title="Briefing">
+  <Header active="briefing" />
+
+  <section class="section">
+    <div class="container">
+      <PageHero label="Briefing" title="Daily field briefing">
+        <p class="page-intro">
+          A daily curated read on AI, platforms, media, and policy — written by
+          the lab's <a href="/team/">comms team</a>. Each issue is a short
+          editorial digest with named sources. Not news about the lab; news
+          the lab is reading.
+        </p>
+      </PageHero>
+
+      {briefings.length > 0 ? (
+        <div class="briefing-list">
+          {briefings.map(b => (
+            <a class="briefing-row" href={`/briefing/${b.slug}/`}>
+              <span class="briefing-date">{isoDate(b.data.date)}</span>
+              <div class="briefing-body">
+                <p class="briefing-title">{b.data.title ?? dateFmt.format(b.data.date)}</p>
+                {b.data.summary && <p class="briefing-summary">{b.data.summary}</p>}
+                {b.data.tags && b.data.tags.length > 0 && (
+                  <p class="briefing-tags">
+                    {b.data.tags.map(t => <span class="tag">{t}</span>)}
+                  </p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-note">The first briefings are forthcoming.</p>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .briefing-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--space-8);
+  }
+  .briefing-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: var(--space-5);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--gray-100);
+    text-decoration: none;
+    color: inherit;
+    align-items: baseline;
+  }
+  .briefing-row:last-child { border-bottom: none; }
+  .briefing-row:hover .briefing-title {
+    color: var(--accent);
+  }
+  .briefing-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .briefing-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: var(--leading-snug);
+    margin: 0 0 4px;
+    color: var(--black);
+    transition: color 0.15s;
+  }
+  .briefing-summary {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin: 0 0 6px;
+  }
+  .briefing-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--gray-100);
+    color: var(--gray-700);
+    border-radius: 2px;
+  }
+  .empty-note {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: var(--space-6);
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .briefing-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

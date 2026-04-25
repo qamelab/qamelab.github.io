@@ -127,4 +127,15 @@ const news = defineCollection({
   }),
 });
 
-export const collections = { papers, publications, team, projects, grants, software, data, news };
+const briefings = defineCollection({
+  type: 'content',
+  schema: z.object({
+    date: z.coerce.date(),
+    title: z.string().optional(),
+    summary: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    byline: z.string().optional(),
+  }),
+});
+
+export const collections = { papers, publications, team, projects, grants, software, data, news, briefings };
