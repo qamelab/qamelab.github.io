@@ -3,24 +3,24 @@
   "displayName": "E. Rentier",
   "role": "Tech/media policy analyst",
   "model": "anthropic/claude-sonnet-4.5",
-  "generatedAt": "2026-04-24T15:17:28.995Z",
-  "summary": "A figure in draped robes holds an unfurled scroll covered in dense burnt-orange text, standing within a geometric stepped border frame.",
+  "generatedAt": "2026-07-10T16:01:30.441Z",
+  "summary": "A figure with straight hair and neutral expression holds a burnt-orange scroll or document displaying text in two columns, set against a tessellated background of geometric tiles containing spheres and birds.",
   "pairs": [
     {
-      "see": "The figure in simple draped robes with neutral expression",
-      "represents": "The deliberate plainness and reserve judgment stance of the analyst"
+      "see": "The central figure with straight hair, dark-framed glasses, and reserved expression",
+      "represents": "The analyst in their late thirties, neutral face trained to reserve judgment"
     },
     {
-      "see": "The unfurled scroll covered in dense burnt-orange text",
-      "represents": "The side-by-side statutory compilation showing what the law actually does"
+      "see": "The burnt-orange scroll with two columns of text held prominently before the figure",
+      "represents": "The side-by-side comparison showing statutory text versus expanded compiled law"
     },
     {
-      "see": "The geometric stepped border creating interlocking frames",
-      "represents": "The layered cross-references and nested definitions in legislative text"
+      "see": "The tessellated background of repeating geometric tiles with spheres and birds",
+      "represents": "Stand-in for the wall of annotated printouts with multiple tracking threads"
     },
     {
-      "see": "The burnt-orange color applied only to the text on the scroll",
-      "represents": "Stand-in for the color-coded markup system tracking bill provisions"
+      "see": "The figure's simple draped garment with rolled sleeves",
+      "represents": "The casual button-down with rolled sleeves, uniform of desk work"
     }
   ]
 }

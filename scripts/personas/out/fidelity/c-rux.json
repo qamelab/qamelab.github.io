@@ -3,28 +3,24 @@
   "displayName": "C. Rux",
   "role": "Briefing editor-in-chief",
   "model": "anthropic/claude-sonnet-4.5",
-  "generatedAt": "2026-04-25T10:27:18.101Z",
-  "summary": "A figure in striped clothing stands at the center of an impossible staircase structure that loops paradoxically upward and downward, holding an unfurled burnt-orange scroll.",
+  "generatedAt": "2026-07-10T16:01:54.648Z",
+  "summary": "A robed figure stands on an impossible Möbius-like loop of burnt-orange ribbon above a desk where a hand grasps a scroll covered in symbols and arrows.",
   "pairs": [
     {
-      "see": "The impossible staircase that ascends and descends simultaneously in a paradoxical loop",
-      "represents": "The work of reading across contradictory narratives and sources that should not align"
+      "see": "The continuous burnt-orange Möbius ribbon looping through space",
+      "represents": "Reading across tribes without allegiance, the endless cycle of verification"
     },
     {
-      "see": "The figure positioned at the central junction where staircases meet",
-      "represents": "The watchful editor who notices the seam where stories do not connect"
+      "see": "The robed figure standing within the loop's curve",
+      "represents": "The watchful editor positioned to see all sides"
     },
     {
-      "see": "The burnt-orange scroll unfurled and held by the figure",
-      "represents": "The legal pad covered in shorthand that forces the eye to slow"
+      "see": "The scroll covered in arrows, symbols, and notations",
+      "represents": "The legal pad with shorthand connecting outlets and misaligned claims"
     },
     {
-      "see": "The striped pattern of the figure's clothing creating visual lines",
-      "represents": "The practical, forgettable uniform of gray and linen worn for work"
-    },
-    {
-      "see": "The geometric frame structure containing the paradoxical space",
-      "represents": "The bare white wall absent of flags or tribal insignia"
+      "see": "The architectural table structure with arched openings below",
+      "represents": "The working reference shelves and infrastructure supporting editorial judgment"
     }
   ]
 }

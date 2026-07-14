@@ -1,8 +1,38 @@
 ---
 slug: reviewer-2
 displayName: "Reviewer #2 (Anonymous)"
-composedAt: 2026-04-24T13:02:58.137Z
+composedAt: 2026-07-11T08:56:32.068Z
 ---
+
+NOTE: this plate was generated with the previous reviewer-2 plate (stairs era,
+archived at scripts/personas/out/portraits/archive/v6-stairs-era/reviewer-2.png)
+attached as an image input — the figure is carried over from it.
+
+Attached is an earlier plate from this engraving series. Generate a NEW plate
+per the full specification below, with one override regarding the figure:
+
+# Figure override (non-negotiable)
+
+THE FIGURE must be the exact person from the attached reference image:
+the same serene seated monk-like figure — bald/tonsured head, gentle
+downward gaze, slight contented smile, simple long robe — seated and
+absorbed in reading the same open two-panel annotated folio held in both
+hands. Reproduce his face, expression, posture and folio faithfully in the
+same engraving line style. Do NOT replace him with a faceless or generic
+figure.
+
+Place this figure INSIDE the reflecting sphere of the new composition,
+seated on a simple flat plane (never on stairs or steps).
+
+# Orange rule for THIS plate (overrides any conflicting line below)
+
+The single burnt-orange (#c4622a) element of the plate is the open annotated folio the figure holds — exactly as in the reference image. The reflecting sphere and its outer ring are pure black-and-white engraving. No other orange anywhere.
+
+Do NOT copy the architecture of the reference image: no cube, no arches,
+no staircases, no steps of any kind. Only the figure comes from the
+reference. No ruler, no pencil, no extra objects lying outside the sphere.
+
+# Full plate specification
 
 Generate a square 1:1 plate in the house style below. Treat it as
 an M.C. Escher print, not a character portrait. The geometric motif
@@ -81,7 +111,7 @@ confidently sized.
 ## Composition
 
 - **Idea first, figure second.** Choose ONE Escher motif — tessellation,
-  impossible staircase, metamorphosis, Möbius strip, reflecting sphere,
+  metamorphosis, Möbius strip, reflecting sphere,
   hands drawing each other, balcony paradox, interlocking lizards / fish
   / birds — and let it structure the whole image. The persona's
   self-description picks *which* motif; the motif then dictates how the
@@ -154,7 +184,7 @@ by extracting only these three things and discarding everything else:
 
   1. **One** Escher geometric motif that embodies how this persona
      thinks. Pick from: tessellation (interlocking figures that tile
-     the plane), Möbius strip, impossible staircase (Penrose), reflecting
+     the plane), Möbius strip, reflecting
      sphere, hand-drawing-hand recursion, metamorphosis (one shape
      gradually becoming another across the plate), Penrose triangle /
      tribar, balcony paradox, two mirrors facing each other. Choose
@@ -168,7 +198,7 @@ by extracting only these three things and discarding everything else:
 
   3. **One** figure inside the motif. The figure is flat, schematic,
      rendered in the same engraving style as the motif — the kind of
-     figure that appears in *Relativity* or *Ascending and Descending*:
+     figure that appears in *Relativity*:
      simplified robe or plain clothing, minimal or no facial features,
      geometric body, no individual likeness, no contemporary fashion,
      no performed expression. The figure is a participant in the
@@ -211,3 +241,13 @@ What would never appear: a gavel. I dismantle arguments; I don't pronounce moral
 - No text, captions, numerals, labels, watermark, or signature.
 - No painterly brushwork, no photorealism, no 3D render, no cinematic
   lighting.
+
+# Motif override (this variant — non-negotiable)
+
+For THIS plate, do not choose the motif yourself. Build the entire plate around exactly this motif: a reflecting sphere (as in Escher's "Hand with Reflecting Sphere"): the plate's own geometry curved and re-examined inside a mirrored globe — the reviewer's gaze that bends everything back for inspection.
+
+Absolutely NO staircases of any kind: no impossible/Penrose stairs, no ordinary stairs, no steps, no stepped platforms, no stepped border frames, no ziggurats, no terraces. If a supporting structure is needed, use flat planes, arches, or the motif itself.
+
+
+CRITICAL: exactly ONE orange object on the whole plate. If the sphere's outer ring is orange, then the scroll, artefact, and everything else must be pure black-and-white. Two orange objects is a failure.
+

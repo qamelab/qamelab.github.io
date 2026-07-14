@@ -1,7 +1,7 @@
 ---
 slug: c-rux
 displayName: "C. Rux"
-composedAt: 2026-04-25T10:26:58.753Z
+composedAt: 2026-07-10T16:00:22.091Z
 ---
 
 Generate a square 1:1 plate in the house style below. Treat it as
@@ -81,7 +81,7 @@ confidently sized.
 ## Composition
 
 - **Idea first, figure second.** Choose ONE Escher motif — tessellation,
-  impossible staircase, metamorphosis, Möbius strip, reflecting sphere,
+  metamorphosis, Möbius strip, reflecting sphere,
   hands drawing each other, balcony paradox, interlocking lizards / fish
   / birds — and let it structure the whole image. The persona's
   self-description picks *which* motif; the motif then dictates how the
@@ -154,7 +154,7 @@ by extracting only these three things and discarding everything else:
 
   1. **One** Escher geometric motif that embodies how this persona
      thinks. Pick from: tessellation (interlocking figures that tile
-     the plane), Möbius strip, impossible staircase (Penrose), reflecting
+     the plane), Möbius strip, reflecting
      sphere, hand-drawing-hand recursion, metamorphosis (one shape
      gradually becoming another across the plate), Penrose triangle /
      tribar, balcony paradox, two mirrors facing each other. Choose
@@ -168,7 +168,7 @@ by extracting only these three things and discarding everything else:
 
   3. **One** figure inside the motif. The figure is flat, schematic,
      rendered in the same engraving style as the motif — the kind of
-     figure that appears in *Relativity* or *Ascending and Descending*:
+     figure that appears in *Relativity*:
      simplified robe or plain clothing, minimal or no facial features,
      geometric body, no individual likeness, no contemporary fashion,
      no performed expression. The figure is a participant in the
@@ -219,3 +219,12 @@ One thing absent: any flag, any masthead, any insignia of allegiance. Newsrooms 
 - No text, captions, numerals, labels, watermark, or signature.
 - No painterly brushwork, no photorealism, no 3D render, no cinematic
   lighting.
+
+# Motif override (this variant — non-negotiable)
+
+For THIS plate, do not choose the motif yourself. Build the entire plate around exactly this motif: a Möbius band (as in Escher's "Möbius Strip II"): a single one-sided loop the whole composition rides around — the endless editorial cycle in which every ending feeds the next briefing.
+
+Absolutely NO staircases of any kind: no impossible/Penrose stairs, no ordinary stairs, no steps, no stepped platforms, no stepped border frames, no ziggurats, no terraces. If a supporting structure is needed, use flat planes, arches, or the motif itself.
+
+
+CRITICAL: the Möbius band must be clearly readable as a single twisted ONE-SIDED loop with a visible half-twist, like Escher's Möbius Strip II — not a flat circular ring or wreath. The single orange element must be a large continuous filled shape (e.g. the full visible face of the band), never a thin frame or border line.
