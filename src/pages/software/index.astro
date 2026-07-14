@@ -9,7 +9,7 @@ import { getCollection } from 'astro:content';
 // Whitelist of software entries to surface on the public page.
 // Keep unlisted entries as markdown files in src/content/software/ so we
 // can re-enable them by adding their slug here.
-const FEATURED = new Set(['p2a', 'litmus', 'dschyyra', 'keim']);
+const FEATURED = new Set(['p2a', 'litmus', 'prompt-arena', 'dschyyra', 'keim']);
 
 const software = (await getCollection('software'))
   .filter(item => FEATURED.has(item.id.replace(/\.md$/, '')))
@@ -48,10 +48,13 @@ function extractHost(url: string): string {
               logoColor={item.data.logoColor}
               logoGradient={item.data.logoGradient}
               logoText={item.data.logoText}
+              logoImage={item.data.logoImage}
               logoCase="lower"
               logoFont="mono"
               href={item.data.repo}
               hrefLabel={extractHost(item.data.repo)}
+              liveUrl={item.data.liveUrl}
+              liveLabel={item.data.liveUrl ? extractHost(item.data.liveUrl) : undefined}
             />
           ))}
         </div>

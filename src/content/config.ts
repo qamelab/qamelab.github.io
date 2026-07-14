@@ -96,9 +96,11 @@ const software = defineCollection({
     stack: z.string(),
     description: z.string(),
     repo: z.string().url(),
+    liveUrl: z.string().url().optional(),
     logoColor: z.string().default('#c4622a'),
     logoText: z.string().optional(),
     logoGradient: z.string().optional(),
+    logoImage: z.string().optional(),
     order: z.number().default(10),
   }),
 });

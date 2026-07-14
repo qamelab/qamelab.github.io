@@ -100,17 +100,21 @@ async function composeForPersona(persona, style) {
     `     a single printed column. Geometric and flat, never a detailed`,
     `     contemporary object. No laptops, no mugs, no chairs, no desks.`,
     ``,
-    `  3. **One** figure inside the motif. The figure is flat, schematic,`,
-    `     rendered in the same engraving style as the motif — the kind of`,
-    `     figure that appears in *Relativity* or *Ascending and Descending*:`,
-    `     simplified robe or plain clothing, minimal or no facial features,`,
-    `     geometric body, no individual likeness, no contemporary fashion,`,
-    `     no performed expression. The figure is a participant in the`,
-    `     geometry, not the star of a character portrait.`,
+    persona.figureNote
+      ? `  3. **The figure** for this plate is fully specified below — use\n     it instead of the standard Escher humanoid. The motif and the\n     artefact follow the rules above; everything inside the figure\n     section is governed by the override.`
+      : [
+          `  3. **One** figure inside the motif. The figure is flat, schematic,`,
+          `     rendered in the same engraving style as the motif — the kind of`,
+          `     figure that appears in *Relativity* or *Ascending and Descending*:`,
+          `     simplified robe or plain clothing, minimal or no facial features,`,
+          `     geometric body, no individual likeness, no contemporary fashion,`,
+          `     no performed expression. The figure is a participant in the`,
+          `     geometry, not the star of a character portrait.`,
+        ].join('\n'),
     ``,
-    `# Figure presentation`,
+    persona.figureNote ? `# Figure override (replaces standard figure rules)` : `# Figure presentation`,
     ``,
-    presentationHint ?? [
+    persona.figureNote ?? presentationHint ?? [
       'No specific gender cue is required. Render the figure as a',
       'neutral schematic Escher figure.',
     ].join('\n'),

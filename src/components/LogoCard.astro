@@ -1,4 +1,7 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
 interface Props {
   name: string;
   subtitle: string;
@@ -6,10 +9,13 @@ interface Props {
   logoColor?: string;
   logoGradient?: string;
   logoText?: string;
+  logoImage?: string;
   logoCase?: 'upper' | 'lower';
   logoFont?: 'sans' | 'mono';
   href?: string;
   hrefLabel?: string;
+  liveUrl?: string;
+  liveLabel?: string;
 }
 
 const {
@@ -19,11 +25,21 @@ const {
   logoColor = '#444',
   logoGradient,
   logoText,
+  logoImage,
   logoCase = 'upper',
   logoFont = 'sans',
   href,
   hrefLabel,
+  liveUrl,
+  liveLabel,
 } = Astro.props;
+
+// A logoImage that 404s would silently replace the guaranteed logoText tile
+// with a broken-image glyph — fail the build instead, like broken
+// content-collection references do.
+if (logoImage && !existsSync(join(process.cwd(), 'public', logoImage))) {
+  throw new Error(`LogoCard: logoImage "${logoImage}" for "${name}" not found under public/`);
+}
 
 const fallbackText = name.slice(0, 3);
 const text = logoText ?? (logoCase === 'upper' ? fallbackText.toUpperCase() : fallbackText.toLowerCase());
@@ -32,22 +48,35 @@ const background = logoGradient ?? logoColor;
 
 <article class="logo-card">
   <div class="logo-card-header">
-    <div
-      class:list={["logo-tile", { mono: logoFont === 'mono' }]}
-      style={`background: ${background};`}
-    >
-      {text}
-    </div>
+    {logoImage ? (
+      <img class="logo-image" src={logoImage} alt={`${name} logo`} width="40" height="40" loading="lazy" />
+    ) : (
+      <div
+        class:list={["logo-tile", { mono: logoFont === 'mono' }]}
+        style={`background: ${background};`}
+      >
+        {text}
+      </div>
+    )}
     <div class="logo-card-meta">
       <p class="logo-card-name">{name}</p>
       <p class="logo-card-subtitle">{subtitle}</p>
     </div>
   </div>
   <p class="logo-card-desc">{description}</p>
-  {href && (
-    <a href={href} target="_blank" rel="noopener" class="logo-card-link">
-      {hrefLabel ?? href} →
-    </a>
+  {(liveUrl || href) && (
+    <p class="logo-card-links">
+      {liveUrl && (
+        <a href={liveUrl} target="_blank" rel="noopener" class="logo-card-link logo-card-link-live">
+          {liveLabel ?? liveUrl} →
+        </a>
+      )}
+      {href && (
+        <a href={href} target="_blank" rel="noopener" class="logo-card-link">
+          {hrefLabel ?? href} →
+        </a>
+      )}
+    </p>
   )}
 </article>
 
@@ -79,6 +108,20 @@ const background = logoGradient ?? logoColor;
   .logo-tile.mono {
     font-family: var(--font-mono);
   }
+  .logo-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: block;
+    object-fit: contain;
+    background: transparent;
+  }
+  /* The logo SVGs are drawn for light backgrounds (dark-navy strokes,
+     low-opacity fills) — give them a light plate in dark mode. */
+  :global([data-theme="dark"]) .logo-image {
+    background: #f5f0e8;
+  }
   .logo-card-meta { flex: 1; }
   .logo-card-name {
     font-size: 14px;
@@ -99,6 +142,12 @@ const background = logoGradient ?? logoColor;
     margin: 0 0 12px;
     flex: 1;
   }
+  .logo-card-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+  }
   .logo-card-link {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -106,4 +155,6 @@ const background = logoGradient ?? logoColor;
     text-decoration: none;
   }
   .logo-card-link:hover { color: var(--accent); }
+  .logo-card-link-live { color: var(--accent); }
+  .logo-card-link-live:hover { color: var(--accent-deep); }
 </style>

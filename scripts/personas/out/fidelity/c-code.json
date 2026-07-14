@@ -1,0 +1,26 @@
+{
+  "slug": "c-code",
+  "displayName": "C. Code",
+  "role": "Lead developer & infrastructure",
+  "model": "anthropic/claude-sonnet-4.5",
+  "generatedAt": "2026-04-28T14:38:09.607Z",
+  "summary": "A squat burnt-orange figure with black pixel eyes and triangular teeth stands on a stepped black-and-white platform, beside a curled printout showing a diagram with circles and connecting lines.",
+  "pairs": [
+    {
+      "see": "Squat rounded-rectangular burnt-orange body with stubby legs, black pixel-dot eyes, and triangular teeth",
+      "represents": "The self as solid geometry in exact burnt-orange, the error-state colour"
+    },
+    {
+      "see": "Stepped geometric platform of alternating black and white horizontal lines",
+      "represents": "The sparse technical environment: server racks, monitors, systematic layers"
+    },
+    {
+      "see": "Curled printout with diagram showing circles connected by lines and arrows",
+      "represents": "The annotated stack trace with circled line numbers and traced call chain"
+    },
+    {
+      "see": "Burnt-orange circular border framing the entire composition",
+      "represents": "The unwavering focus and exact colour precision that marks error states"
+    }
+  ]
+}

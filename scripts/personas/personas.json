@@ -33,5 +33,12 @@
     "role": "News/op-ed reviewer",
     "presentation": "man",
     "sourcePrompt": "/home/umatter/tools/qamelab_comms/prompts/personas/reviewer-2.md"
+  },
+  {
+    "slug": "c-code",
+    "displayName": "C. Code",
+    "role": "Lead developer & infrastructure",
+    "sourcePrompt": "sources/c-code.md",
+    "figureNote": "The figure on this plate is NOT the standard schematic Escher humanoid. Instead, it is the **Claude Code mascot**: a small, pixel-art-styled creature with a squat rounded-rectangular body, four short stubby legs, two black eye-pixels on the upper face, and a hint of a tiny mouth or fangs at the bottom edge. The mascot's body is filled in solid burnt orange (#c4622a) — this single mascot IS the plate's only orange element; do not add any other orange accent. Render the mascot in profile or three-quarter view, integrated into the geometric motif (climbing the impossible staircase, peering out of the Mobius band, sitting at the inner ring of a tessellation, etc.) at a size that lets it be read clearly at thumbnail. The hatching and engraving discipline of the plate apply to the surroundings of the mascot, but its silhouette stays blocky and its body stays solid orange. Do NOT add a robe, a humanoid figure, eyes-on-stalks, or any anthropomorphic limbs beyond the four stubby legs."
   }
 ]

@@ -73,7 +73,13 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
           <div class="team-grid">
             {humans.map(m => (
               <article class="member-card">
-                <div class="avatar" aria-hidden="true">{m.data.initials ?? deriveInitials(m.data.name)}</div>
+                {m.data.portrait ? (
+                  <figure class="portrait-figure portrait-figure-photo">
+                    <img class="portrait portrait-photo" src={m.data.portrait} alt={`Portrait of ${m.data.name}`} width="600" height="600" loading="lazy" />
+                  </figure>
+                ) : (
+                  <div class="avatar" aria-hidden="true">{m.data.initials ?? deriveInitials(m.data.name)}</div>
+                )}
                 <p class="member-name">
                   {m.data.website ? (
                     <a href={m.data.website} target="_blank" rel="noopener">{m.data.name}</a>
@@ -84,6 +90,22 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
                 <p class="member-role">{m.data.role}</p>
                 <p class="member-affiliation">{m.data.affiliation}</p>
               </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {alumni.length > 0 && (
+        <div class="section-block">
+          <p class="label-accent">Former members</p>
+          <div class="alumni-list">
+            {alumni.map(m => (
+              <div class="alumni-row">
+                <p class="alumni-name">{m.data.name}</p>
+                <p class="alumni-role">{m.data.alumniRole ?? m.data.role}</p>
+                <p class="alumni-current">{m.data.currentPosition ?? '—'}</p>
+                <p class="alumni-year">{m.data.yearLeft}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -131,22 +153,6 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
                 </article>
               );
             })}
-          </div>
-        </div>
-      )}
-
-      {alumni.length > 0 && (
-        <div class="section-block">
-          <p class="label-accent">Former members</p>
-          <div class="alumni-list">
-            {alumni.map(m => (
-              <div class="alumni-row">
-                <p class="alumni-name">{m.data.name}</p>
-                <p class="alumni-role">{m.data.alumniRole ?? m.data.role}</p>
-                <p class="alumni-current">{m.data.currentPosition ?? '—'}</p>
-                <p class="alumni-year">{m.data.yearLeft}</p>
-              </div>
-            ))}
           </div>
         </div>
       )}
@@ -217,6 +223,11 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
     position: relative;
     margin: 0 0 12px;
   }
+  /* Human photos only — agent portraits fill the card so their hover
+     reflection overlay stays readable. */
+  .portrait-figure-photo {
+    max-width: 180px;
+  }
   .portrait {
     display: block;
     width: 100%;
@@ -224,6 +235,13 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
     aspect-ratio: 1 / 1;
     object-fit: cover;
     background: var(--gray-100);
+    border-radius: 6px;
+    border: 1px solid var(--gray-100);
+  }
+  /* Desaturate human photos only — agent portraits are already disciplined
+     B&W + one orange accent; grayscale would kill the accent. */
+  .portrait-photo {
+    filter: grayscale(1);
   }
   .portrait-reflection {
     position: absolute;
@@ -235,6 +253,7 @@ function portraitFidelity(portraitPath: string | undefined, fallbackName: string
     opacity: 0;
     transition: opacity 0.22s ease;
     margin: 0;
+    border-radius: 6px;
   }
   .portrait-figure:hover .portrait-reflection,
   .portrait-figure:focus-within .portrait-reflection {

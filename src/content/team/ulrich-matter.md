@@ -6,5 +6,6 @@ status: current
 website: https://umatter.github.io
 email: ulrich.matter@bfh.ch
 initials: UM
+portrait: /team/ulrich-matter.jpg
 order: 1
 ---

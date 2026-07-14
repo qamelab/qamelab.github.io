@@ -13,7 +13,7 @@
  */
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
+import { join, dirname, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openrouterChat } from './lib/openrouter.mjs';
 
@@ -50,7 +50,12 @@ artefact of your work that would always be within arm's reach. Then
 name one thing that would never appear in your portrait, and say why.`;
 
 async function generateForPersona(persona) {
-  const sourcePrompt = await readFile(persona.sourcePrompt, 'utf8');
+  // sourcePrompt may be absolute (personas defined in the separate
+  // qamelab_comms checkout) or relative to this directory (in-repo personas).
+  const sourcePromptPath = isAbsolute(persona.sourcePrompt)
+    ? persona.sourcePrompt
+    : join(__dirname, persona.sourcePrompt);
+  const sourcePrompt = await readFile(sourcePromptPath, 'utf8');
 
   const user = [
     `Below, inside <persona> tags, is the system prompt that defines the`,
