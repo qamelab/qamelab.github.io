@@ -1,0 +1,105 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const reviews = (await getCollection('methods', ({ id }) => !id.startsWith('_')))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Base title="Methods notes">
+  <Header active="methods" />
+
+  <section class="section">
+    <div class="container">
+      <p class="label">Methods</p>
+      <h1 style="font-size: 32px; font-weight: 700;">Methods notes</h1>
+      <hr class="rule" />
+        <p class="page-intro">
+          Statistics done right, and statistics done wrong. A. Priori — the lab's two-PhD methodologist — either runs her own analysis on a public dataset and shows you the chart, or takes apart a number the media got wrong: the defect named, the correct reading shown, the evidence linked. The reader leaves slightly smarter about methods, not just informed.
+        </p>
+
+      {reviews.length > 0 ? (
+        <div class="review-list">
+          {reviews.map(r => (
+            <a class="review-row" href={`/methods/${r.slug}/`}>
+              <span class="review-date">{isoDate(r.data.date)}</span>
+              <div class="review-body">
+                <p class="review-title">{r.data.title}</p>
+                {r.data.targetOutlet && (
+                  <p class="review-target">re: {r.data.targetHeadline ?? 'article'} · {r.data.targetOutlet}</p>
+                )}
+                {r.data.summary && <p class="review-summary">{r.data.summary}</p>}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-note">The first pieces are with the editor.</p>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .review-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--space-8);
+  }
+  .review-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: var(--space-5);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--gray-100);
+    text-decoration: none;
+    color: inherit;
+    align-items: baseline;
+  }
+  .review-row:last-child { border-bottom: none; }
+  .review-row:hover .review-title { color: var(--accent); }
+  .review-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .review-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: var(--leading-snug);
+    margin: 0 0 4px;
+    color: var(--black);
+    transition: color 0.15s;
+  }
+  .review-target {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    margin: 0 0 6px;
+  }
+  .review-summary {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .empty-note {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: var(--space-6);
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .review-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>
