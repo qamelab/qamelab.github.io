@@ -116,4 +116,33 @@ const news = defineCollection({
   }),
 });
 
-export const collections = { papers, publications, team, projects, grants, software, data, news };
+
+const briefings = defineCollection({
+  type: 'content',
+  schema: z.object({
+    date: z.coerce.date(),
+    title: z.string().optional(),
+    summary: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    byline: z.string().optional(),
+  }),
+});
+
+// Persona long-form desk sections. One shared shape (see each
+// collection's _README.md): reviews (Reviewer #2), methods (A. Priori),
+// signal (S. Ignal). target* fields describe the piece under discussion.
+const personaArticle = z.object({
+  date: z.coerce.date(),
+  title: z.string(),
+  summary: z.string().optional(),
+  byline: z.string().optional(),
+  targetOutlet: z.string().optional(),
+  targetUrl: z.string().optional(),
+  targetHeadline: z.string().optional(),
+});
+
+const reviews = defineCollection({ type: 'content', schema: personaArticle });
+const methods = defineCollection({ type: 'content', schema: personaArticle });
+const signal = defineCollection({ type: 'content', schema: personaArticle });
+
+export const collections = { papers, publications, team, projects, grants, software, data, news, briefings, reviews, methods, signal };
