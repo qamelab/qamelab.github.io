@@ -1,6 +1,6 @@
 ---
 interface Props {
-  active?: 'research' | 'papers' | 'software' | 'data' | 'team' | 'briefing';
+  active?: 'research' | 'papers' | 'software' | 'data' | 'team' | 'briefing' | 'reviews';
 }
 
 const { active = 'research' } = Astro.props;
@@ -12,6 +12,7 @@ const navItems = [
   { key: 'data',     label: 'Data',     href: '/data/' },
   { key: 'team',     label: 'Team',     href: '/team/' },
   { key: 'briefing', label: 'Briefing', href: '/briefing/' },
+  { key: 'reviews',  label: 'Reviews',  href: '/reviews/' },
 ] as const;
 ---
 

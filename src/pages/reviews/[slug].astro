@@ -1,0 +1,163 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const reviews = await getCollection('reviews', ({ id }) => !id.startsWith('_'));
+  return reviews.map(r => ({ params: { slug: r.slug }, props: { entry: r } }));
+}
+
+interface Props { entry: CollectionEntry<'reviews'>; }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Base title={entry.data.title}>
+  <Header active="reviews" />
+
+  <section class="section">
+    <div class="container">
+      <PageHero
+        label={`Review · ${isoDate(entry.data.date)}`}
+        title={entry.data.title}
+      >
+        {entry.data.summary && <p class="page-intro">{entry.data.summary}</p>}
+        {entry.data.byline && <p class="meta-line">{entry.data.byline}</p>}
+      </PageHero>
+
+      {entry.data.targetUrl && (
+        <aside class="under-review">
+          <span class="under-review-label">Under review</span>
+          <a href={entry.data.targetUrl} rel="noopener" target="_blank">
+            {entry.data.targetHeadline ?? entry.data.targetUrl}
+          </a>
+          {entry.data.targetOutlet && <span class="outlet">{entry.data.targetOutlet}</span>}
+        </aside>
+      )}
+
+      <article class="review-prose">
+        <Content />
+      </article>
+
+      <nav class="review-nav" aria-label="Review navigation">
+        <a class="review-nav-link" href="/reviews/">← All reviews</a>
+      </nav>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .meta-line {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-top: var(--space-2);
+  }
+
+  .under-review {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin: var(--space-8) auto 0;
+    max-width: 40rem;
+    padding: var(--space-3) var(--space-4);
+    border-left: 3px solid var(--accent);
+    background: var(--gray-50);
+    font-size: 13px;
+  }
+  .under-review-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    white-space: nowrap;
+  }
+  .under-review a {
+    color: var(--black);
+    font-weight: 500;
+    text-decoration-color: var(--gray-300);
+  }
+  .under-review a:hover { text-decoration-color: var(--accent); }
+  .under-review .outlet {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+
+  .review-prose {
+    max-width: 40rem;
+    margin: var(--space-8) auto 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+  .review-prose :global(h2) {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.25;
+    margin: var(--space-12) 0 var(--space-2);
+    letter-spacing: -0.01em;
+  }
+  .review-prose :global(h2::before) {
+    content: "";
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    margin-bottom: var(--space-3);
+  }
+  .review-prose :global(h3) {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--black);
+    margin: var(--space-8) 0 var(--space-2);
+  }
+  .review-prose :global(p) { margin: 0 0 var(--space-4); }
+  .review-prose :global(ol), .review-prose :global(ul) {
+    margin: 0 0 var(--space-4);
+    padding-left: var(--space-6);
+  }
+  .review-prose :global(li) { margin-bottom: var(--space-3); }
+  .review-prose :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  .review-prose :global(a:hover) { color: var(--accent-deep); }
+  .review-prose :global(strong) { color: var(--black); font-weight: 600; }
+  .review-prose :global(blockquote) {
+    margin: var(--space-5) 0;
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--accent);
+    color: var(--gray-700);
+    font-style: italic;
+  }
+
+  .review-nav {
+    margin-top: var(--space-14);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--gray-100);
+  }
+  .review-nav-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    text-decoration: none;
+  }
+  .review-nav-link:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .review-prose { font-size: 14px; }
+  }
+</style>

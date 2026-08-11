@@ -140,4 +140,19 @@ const briefings = defineCollection({
   }),
 });
 
-export const collections = { papers, publications, team, projects, grants, software, data, news, briefings };
+
+const reviews = defineCollection({
+  type: 'content',
+  schema: z.object({
+    date: z.coerce.date(),
+    title: z.string(),
+    summary: z.string().optional(),
+    byline: z.string().optional(),
+    // The article under review (written by qame-comms at export time).
+    targetOutlet: z.string().optional(),
+    targetUrl: z.string().optional(),
+    targetHeadline: z.string().optional(),
+  }),
+});
+
+export const collections = { papers, publications, team, projects, grants, software, data, news, briefings, reviews };
